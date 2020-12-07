@@ -10,7 +10,8 @@ function Library(){
     // for getting out of local storage 
     // const saveditems = JSON.parse(localStorage.getItem('items'));
     // const [items, setItems] = useState(saveditems || []);
-    const [favorites, setFavorites] = useState([]);
+    const saveditems = JSON.parse(localStorage.getItem('favorites'));
+    const [favorites, setFavorites] = useState(saveditems || []);
 
     function handleChange(event){
         const returnedArray = prefectures.filter(prefecture => prefecture.name_jp===event.target.value);
@@ -38,7 +39,7 @@ function Library(){
         }
     }
 
-    function clickHandler(event){
+    function addFavorite(event){
         const newFavorite = event.target.dataset.systemid;
         setFavorites(prevArray =>{
             let newArray = [...prevArray];
@@ -47,18 +48,24 @@ function Library(){
         });
     }
 
+    function handleClearButtonClick(){
+        setFavorites([]);
+        localStorage.setItem('favorites', JSON.stringify([]));
+    }
+
     const options = prefectures.map((prefecture, index)=> <option value={prefecture.name_jp} key={index}>{prefecture.name_en}</option>);
 
     return (
         <div className="library">
             <h1>Searching for {search.name_en}</h1>
             <h2>Saved libraries: {favorites.join(", ")}</h2>
+            <button onClick={handleClearButtonClick}>Clear favorites</button>
            <form>
                 <select value={search.name_jp} onChange={handleChange}>
                 {options}
                 </select>
             </form>
-            <Libraryresults clickHandler={clickHandler} data={libraries}/>
+            <Libraryresults handleFavoriteButtonClick={addFavorite} data={libraries}/>
         </div>
     );
 }

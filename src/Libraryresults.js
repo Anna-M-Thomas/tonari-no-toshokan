@@ -16,7 +16,7 @@ function Libraryresults(props){
 //for each category, get the libraries in that category and render a sublist
         const list = categories.map((category, index)=> 
                                     <details key={index}>
-                                    <summary>{category.replace("_", " ")}<button data-systemid={category} onClick={props.clickHandler}>Add to favorites</button></summary>
+                                    <summary>{category.replace("_", " ")}<button data-systemid={category} onClick={props.handleFavoriteButtonClick}>Add to favorites</button></summary>
                                     <ul>
                                        <Subliblist data={props.data} category={category}/>
                                     </ul>

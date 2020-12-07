@@ -14,7 +14,9 @@ function Subliblist(props){
     const list = props.data.filter(object=>object.systemid==props.category)
                             .map(object=>
                             <li key={object.libid}>
-                                Japanese name: {object.formal} <img src={`https://calil.jp/public/img/libicon/${object.category}.png`} /> {categoryKey[object.category]}
+                                Japanese name: {object.formal} 
+                                <img src={`https://calil.jp/public/img/libicon/${object.category}.png`} /> 
+                                {categoryKey[object.category]}
                             </li>)
     return list;
 }
