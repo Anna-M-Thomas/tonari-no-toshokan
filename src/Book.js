@@ -1,11 +1,12 @@
 import React from 'react';
 
 function Book() {
-  console.log("test");
-
+  const favoritesArray = JSON.parse(window.localStorage.getItem('favorites'));
+const someJSX = favoritesArray.map(item => <h2>{item}</h2>);
+  
   return (
     <div className="Book">
-      Book
+      These are your favorites: {someJSX}
     </div>
   );
 }
