@@ -3,7 +3,8 @@ import Request from "axios-request-handler";
 
 const Books = ({ search }) => {
   const [data, setData] = useState({});
-  const [string, setString] = useState("");
+  const [array, setArray] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   const baseURL1 = "http://localhost:8080/https://api.calil.jp/check";
   // const baseURL1 = "http://localhost:3001/once";
   // const baseURL2 = "http://localhost:3001/several";
@@ -16,7 +17,9 @@ const Books = ({ search }) => {
       console.log("Nope, not doing it");
       return;
     }
+
     let session = 0;
+    setLoading(true);
     const requestInstance = new Request(baseURL1, {
       params: {
         appkey: `${process.env.REACT_APP_API_KEY}`,
@@ -32,6 +35,7 @@ const Books = ({ search }) => {
       if (res.data.continue === 0) {
         console.log("We didn't need to poll");
         setData(res.data.books);
+        setLoading(false);
       } else if (res.data.continue === 1) {
         console.log("Continue was 1, we need to start polling");
         session = res.data.session;
@@ -56,6 +60,7 @@ const Books = ({ search }) => {
             console.log("Response", res);
             session = 0;
             setData(res.data.books);
+            setLoading(false);
             return false;
           }
         });
@@ -69,17 +74,25 @@ const Books = ({ search }) => {
       return;
     }
 
-    let tempString = "";
-    const libkey = data[search.isbn][search.systemid]["libkey"] || {};
-    if (libkey) {
+    //Get object showing book info. If empty object, saw it's empty.
+    const libkey = data[search.isbn][search.systemid]["libkey"];
+    let infoArray = [<h3>{search.systemid.replace("_", " ")}</h3>];
+    if (Object.keys(libkey).length === 0) {
+      infoArray.push(<div>No results for this book</div>);
+    } else {
       for (const property in libkey) {
-        tempString += `Library name (Japanese): ${property} Book status: ${libkey[property]} `;
+        infoArray.push(
+          <div>
+            Library name (Japanese): {property} Book status:
+            {libkey[property]}
+          </div>
+        );
       }
-      setString(tempString);
     }
+    setArray(infoArray);
   }, [data]);
 
-  return <div>{string}</div>;
+  return isLoading ? <div>Loading....</div> : <div>{array}</div>;
 };
 export default Books;
 

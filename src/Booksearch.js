@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Books from "./components/Books";
 
-function Booksearch({ favorites }) {
-  const favoriteslist = favorites.map((item, index) => (
-    <h2 key={index}>{item}</h2>
-  ));
-
+function Booksearch({ selected }) {
   const [isbn, setISBN] = useState(0);
+  //search and setSearch need to be changed to an empty array
   const [search, setSearch] = useState({ systemid: null, isbn: null });
 
   function handleChange(event) {
@@ -17,15 +14,22 @@ function Booksearch({ favorites }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    setSearch({ systemid: favorites[0], isbn: isbn });
+    //for each library in selected, make an object with different systemid, same isbn and put into array
+    //Then put that in setSearch
+    setSearch({ systemid: selected[0], isbn: isbn });
     setISBN(0);
   }
 
+  const selectedList = selected.map((item, index) => (
+    <h2 key={index}>{item.replace("_", "")}</h2>
+  ));
+
   return (
     <div className="Book">
-      These are your favorites: {favoriteslist}
+      These are your selected libraries:{" "}
+      {<h2>{selected.map((item) => item.replace("_", " ")).join(", ")}</h2>}
       Let's search for a book! Enter an ISBN.
-      {isbn && <div>Your isbn is: {isbn}</div>}
+      {isbn ? <div>Your isbn is: {isbn}</div> : ""}
       <form onSubmit={handleSubmit}>
         <label>
           ISBN:

@@ -5,8 +5,8 @@ import Booksearch from "./Booksearch";
 const App = () => {
   const [mode, changeMode] = useState("book");
 
-  const saveditems = JSON.parse(localStorage.getItem("favorites"));
-  const [favorites, setFavorites] = useState(saveditems || []);
+  const saveditems = JSON.parse(localStorage.getItem("selected"));
+  const [selected, setSelected] = useState(saveditems || []);
 
   const handleChange = () => {
     changeMode(mode === "library" ? "book" : "library");
@@ -24,14 +24,14 @@ const App = () => {
     return (
       <>
         {menuthing}
-        <Librarysearch favorites={favorites} setFavorites={setFavorites} />
+        <Librarysearch selected={selected} setSelected={setSelected} />
       </>
     );
   } else if (mode === "book") {
     return (
       <>
         {menuthing}
-        <Booksearch favorites={favorites} />
+        <Booksearch selected={selected} />
       </>
     );
   }

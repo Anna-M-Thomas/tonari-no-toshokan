@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from "react";
-import Libraryresults from "./components/Libraryresults";
-import prefectures from "./components/prefectures";
+import Libraries from "./components/Libraries";
+import prefectures from "./assets/prefectures";
 import axios from "axios";
 
-function Librarysearch({ favorites, setFavorites }) {
+function Librarysearch({ selected, setSelected }) {
   const [libraries, setLibraries] = useState([]);
-  const [search, setSearch] = useState({
-    name_jp: "",
-    name_en: "",
-  });
+  const [search, setSearch] = useState({ name_jp: "", name_en: "..." });
 
   // for getting out of local storage
   // const saveditems = JSON.parse(localStorage.getItem('items'));
   // const [items, setItems] = useState(saveditems || []);
 
   function handleChange(event) {
-    const returnedArray = prefectures.filter(
+    const selectedPrefecture = prefectures.find(
       (prefecture) => prefecture.name_jp === event.target.value
     );
-    const selectedObject = returnedArray[0];
-    setSearch(selectedObject);
+    setSearch(selectedPrefecture);
   }
 
   useEffect(() => {
@@ -36,17 +32,18 @@ function Librarysearch({ favorites, setFavorites }) {
   }, [search]);
 
   useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }, [favorites]);
+    localStorage.setItem("selected", JSON.stringify(selected));
+  }, [selected]);
 
-  function addFavorite(event) {
-    const newFavorite = event.target.dataset.systemid;
-    setFavorites(favorites.concat(newFavorite));
+  function addSelected(event) {
+    const newSelected = event.target.dataset.systemid;
+    console.log(newSelected);
+    setSelected(selected.concat(newSelected));
   }
 
   function handleClearButtonClick() {
-    setFavorites([]);
-    localStorage.setItem("favorites", JSON.stringify([]));
+    setSelected([]);
+    localStorage.setItem("selected", JSON.stringify([]));
   }
 
   const options = prefectures.map((prefecture, index) => (
@@ -57,18 +54,18 @@ function Librarysearch({ favorites, setFavorites }) {
 
   return (
     <div className="library">
-      <h1>Searching for {search.name_en}</h1>
-      <h2>Saved libraries: {favorites.join(", ")}</h2>
-      <button onClick={handleClearButtonClick}>Clear favorites</button>
+      <h1>Searching for: {search.name_en}</h1>
+      <h2>
+        Selected library groups:{" "}
+        {selected.map((item) => item.replace("_", " ")).join(", ")}
+      </h2>
+      <button onClick={handleClearButtonClick}>Clear libraries</button>
       <form>
         <select value={search.name_jp} onChange={handleChange}>
           {options}
         </select>
       </form>
-      <Libraryresults
-        handleFavoriteButtonClick={addFavorite}
-        data={libraries}
-      />
+      <Libraries addSelected={addSelected} data={libraries} />
     </div>
   );
 }
