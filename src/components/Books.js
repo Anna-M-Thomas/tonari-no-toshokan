@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Request from "axios-request-handler";
+import bookValue from "../assets/bookValue";
 
 const Books = ({ search }) => {
   const [data, setData] = useState({});
@@ -76,15 +77,19 @@ const Books = ({ search }) => {
 
     //Get object showing book info. If empty object, saw it's empty.
     const libkey = data[search.isbn][search.systemid]["libkey"];
+    const reserveurl = data[search.isbn][search.systemid]["reserveurl"];
     let infoArray = [<h3>{search.systemid.replace("_", " ")}</h3>];
     if (Object.keys(libkey).length === 0) {
       infoArray.push(<div>No results for this book</div>);
     } else {
       for (const property in libkey) {
+        const status = libkey[property];
         infoArray.push(
           <div>
-            Library name (Japanese): {property} Book status:
-            {libkey[property]}
+            Library name (Japanese): {property} Book status: {bookValue(status)}{" "}
+            <a href={reserveurl} target="_blank">
+              Reserve here
+            </a>
           </div>
         );
       }
@@ -98,6 +103,3 @@ export default Books;
 
 //data[ISBN#]["System Id in Quotes"]["reserveurl"]
 //data[ISBN#]["System Id in Quotes"]["libkey"] <==This is an object
-
-//Possible values  貸出可、 蔵書あり、 館内のみ、 貸出中、 予約中、 準備中、 休館中、 蔵書なし
-//EXCEPT there might be unique values, so make sure to include an extra option showing "other" and Japanese

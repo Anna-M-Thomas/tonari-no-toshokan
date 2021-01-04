@@ -1,11 +1,13 @@
 {
   "folders": [
-	{
-		"path": "../.."
-	},
-	{
-		"path": "../../../fakeapi"
-	}
-],
+    {
+      "name": "tonari-no-toshokan",
+      "path": "../.."
+    },
+    {
+      "name": "fakeapi",
+      "path": "../../../fakeapi"
+    }
+  ],
   "settings": {}
 }
