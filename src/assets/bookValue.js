@@ -16,3 +16,6 @@ const bookValue = (property) => {
 };
 
 export default bookValue;
+
+//Possible values  貸出可、 蔵書あり、 館内のみ、 貸出中、 予約中、 準備中、 休館中、 蔵書なし
+//EXCEPT there might be unique values, so make sure to include an extra option showing "other" and Japanese

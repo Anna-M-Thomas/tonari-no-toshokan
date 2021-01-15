@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
-import Libraries from "./components/Libraries";
+import Libraries from "./components/library/Libraries";
 import prefectures from "./assets/prefectures";
 import axios from "axios";
 
-function Librarysearch({ selected, setSelected }) {
+function Librarysearch({ selected, setSelected, isbn, book }) {
   const [libraries, setLibraries] = useState([]);
   const [search, setSearch] = useState({ name_jp: "", name_en: "..." });
 
-  // for getting out of local storage
-  // const saveditems = JSON.parse(localStorage.getItem('items'));
-  // const [items, setItems] = useState(saveditems || []);
+  console.log(
+    "Does book exist?",
+    Object.keys(book).length !== 0
+      ? `Yes. The isbn is${book.industryIdentifiers[0].identifier} and the title is ${book.title}`
+      : "No"
+  );
+  console.log("Selected ISBN:", isbn ? isbn : "...");
 
   function handleChange(event) {
     const selectedPrefecture = prefectures.find(
@@ -37,13 +41,10 @@ function Librarysearch({ selected, setSelected }) {
 
   function addSelected(event) {
     const newSelected = event.target.dataset.systemid;
-    console.log(newSelected);
-    setSelected(selected.concat(newSelected));
-  }
-
-  function handleClearButtonClick() {
-    setSelected([]);
-    localStorage.setItem("selected", JSON.stringify([]));
+    const inArray = selected.some((library) => library === newSelected);
+    if (!inArray) {
+      setSelected(selected.concat(newSelected));
+    }
   }
 
   const options = prefectures.map((prefecture, index) => (
@@ -54,17 +55,18 @@ function Librarysearch({ selected, setSelected }) {
 
   return (
     <div className="library">
-      <h1>Searching for: {search.name_en}</h1>
-      <h2>
-        Selected library groups:{" "}
-        {selected.map((item) => item.replace("_", " ")).join(", ")}
-      </h2>
-      <button onClick={handleClearButtonClick}>Clear libraries</button>
-      <form>
-        <select value={search.name_jp} onChange={handleChange}>
-          {options}
-        </select>
-      </form>
+      <div className="libraryTop">
+        <h2>Find a library</h2>
+        <form>
+          <select
+            className="select-css"
+            value={search.name_jp}
+            onChange={handleChange}
+          >
+            {options}
+          </select>
+        </form>
+      </div>
       <Libraries addSelected={addSelected} data={libraries} />
     </div>
   );

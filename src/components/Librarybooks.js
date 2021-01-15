@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Request from "axios-request-handler";
 import bookValue from "../assets/bookValue";
 
-const Books = ({ search }) => {
+const Librarybooks = ({ search }) => {
   const [data, setData] = useState({});
   const [array, setArray] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -79,7 +79,9 @@ const Books = ({ search }) => {
     const libkey = data[search.isbn][search.systemid]["libkey"];
     const reserveurl = data[search.isbn][search.systemid]["reserveurl"];
     let infoArray = [<h3>{search.systemid.replace("_", " ")}</h3>];
-    if (Object.keys(libkey).length === 0) {
+    if (libkey === undefined) {
+      infoArray.push(<div>No results for this book</div>);
+    } else if (Object.keys(libkey).length === 0) {
       infoArray.push(<div>No results for this book</div>);
     } else {
       for (const property in libkey) {
@@ -87,7 +89,7 @@ const Books = ({ search }) => {
         infoArray.push(
           <div>
             Library name (Japanese): {property} Book status: {bookValue(status)}{" "}
-            <a href={reserveurl} target="_blank">
+            <a href={reserveurl} target="_blank" rel="noreferrer">
               Reserve here
             </a>
           </div>
@@ -99,7 +101,7 @@ const Books = ({ search }) => {
 
   return isLoading ? <div>Loading....</div> : <div>{array}</div>;
 };
-export default Books;
+export default Librarybooks;
 
 //data[ISBN#]["System Id in Quotes"]["reserveurl"]
 //data[ISBN#]["System Id in Quotes"]["libkey"] <==This is an object

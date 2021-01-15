@@ -1,78 +1,82 @@
 import React, { useState, useEffect } from "react";
-import Books from "./components/Books";
-import Isbngetter from "./components/Isbngetter";
+import Librarybooks from "./components/Librarybooks";
+import Book from "./components/Book";
+import Googlebooks from "./components/Googlebooks";
 
-function Booksearch({ selected }) {
-  const [isbn, setISBN] = useState("");
-  const [isbnTerm, setIsbnTerm] = useState("");
+function Booksearch({
+  selected,
+  book,
+  setBook,
+  googleBooksOpen,
+  setGoogleBooksOpen,
+}) {
+  const [googleBooksQuery, setGoogleBooksQuery] = useState("");
   const [isbnSearch, setIsbnSearch] = useState("");
-  //search and setSearch need to be changed to an empty array
-  const [search, setSearch] = useState({ systemid: null, isbn: null });
-
-  function handleChangeIsbn(event) {
-    let isbnString = event.target.value;
-    console.log("isbnString", isbnString);
-    setISBN(isbnString);
-  }
+  const [search, setSearch] = useState([]);
 
   function handleChangeQuery(event) {
-    setIsbnTerm(event.target.value);
+    setGoogleBooksQuery(event.target.value);
   }
 
   function handleIsbnQuery(event) {
-    if (isbnTerm) {
-      setIsbnSearch(isbnTerm);
-    }
-  }
-
-  function handleSubmit(event) {
     event.preventDefault();
-    if (isbn) {
-      //for each library in selected, make an object with different systemid, same isbn and put into array
-      //Then put that in setSearch
-      setSearch({ systemid: selected[0], isbn: isbn });
-      setISBN(0);
+    if (googleBooksQuery) {
+      setIsbnSearch(googleBooksQuery);
+      setGoogleBooksOpen(true);
     }
   }
 
-  const selectedList = selected.map((item, index) => (
-    <h2 key={index}>{item.replace("_", "")}</h2>
-  ));
+  function handleLibraryBookSearch(event) {
+    event.preventDefault();
+    if (book) {
+      let newArray = selected.map((library) => {
+        return {
+          systemid: library,
+          isbn: book.industryIdentifiers[0].identifier,
+        };
+      });
+      setSearch(newArray);
+    }
+  }
 
   return (
     <div className="Book">
-      These are your selected libraries:{" "}
-      {<h2>{selected.map((item) => item.replace("_", " ")).join(", ")}</h2>}
-      Let's search for a book! Enter an ISBN, or search for an ISBN
-      <Isbngetter isbnSearch={isbnSearch} />
-      {<div>Your isbn is: {isbn ? isbn : "..."}</div>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Set ISBN:
-          <input
-            type="text"
-            name="isbn"
-            placeholder="ISBN #"
-            pattern="[0-9Xx\-]+"
-            onChange={handleChangeIsbn}
+      <div className="bookTop">
+        <div className="selectedBook">
+          <p>Selected book:</p>
+          <Book book={book} setBook={setBook} includeButton={false} />
+          <form onSubmit={handleIsbnQuery}>
+            <label>
+              Search for another book
+              <input
+                type="text"
+                name="isbnSearch"
+                placeholder="Search..."
+                onChange={handleChangeQuery}
+              />
+            </label>
+            <button type="submit">Enter</button>
+          </form>
+        </div>
+        {googleBooksOpen ? (
+          <Googlebooks
+            isbnSearch={isbnSearch}
+            setBook={setBook}
+            setGoogleBooksOpen={setGoogleBooksOpen}
           />
-        </label>
-        <br />
-        <label>
-          Search for ISBN:
-          <input
-            type="text"
-            name="isbnSearch"
-            placeholder="Search..."
-            onChange={handleChangeQuery}
-          />
-        </label>
-        <button onClick={handleIsbnQuery}>Search (Google books)</button>
-        <br />
-
-        <button type="submit">Search for book</button>
+        ) : (
+          ""
+        )}
+      </div>
+      <form onSubmit={handleLibraryBookSearch} id="search_library_for_book">
+        <button type="submit" form="search_library_for_book">
+          Search for book
+        </button>
       </form>
-      <Books search={search} />
+      <br />
+      {search.map((library) => (
+        <Librarybooks search={library} key={library.systemid} />
+      ))}
     </div>
   );
 }

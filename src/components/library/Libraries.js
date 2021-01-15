@@ -1,10 +1,10 @@
 import React from "react";
 import Library from "./Library";
 
+//This makes sub-categories out of each prefecture + city name
+//for each category, render a Library component
 function Libraries({ data, addSelected }) {
   function getList() {
-    //This makes sub-categories out of each prefecture + city name
-    // Use .replace("_", " ") to clean up system ID for rendering
     let categories = [];
 
     for (let i = 1; i < data.length; i++) {
@@ -12,7 +12,6 @@ function Libraries({ data, addSelected }) {
       if (categories.indexOf(city) === -1) categories.push(city);
     }
 
-    //for each category, render Library component
     return categories.map((category, index) => (
       <Library
         key={index}

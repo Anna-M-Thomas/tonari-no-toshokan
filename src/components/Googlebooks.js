@@ -1,8 +1,8 @@
 import react, { useState, useEffect } from "react";
 import Request from "axios-request-handler";
-import Isbnbook from "./Isbnbook";
+import Book from "./Book";
 
-const Isbngetter = ({ isbnSearch }) => {
+const Googlebooks = ({ isbnSearch, setBook, setGoogleBooksOpen }) => {
   const [books, setBooks] = useState([]);
   const baseURL = `https://www.googleapis.com/books/v1/volumes?q=${isbnSearch}&fields=items(volumeInfo)&maxResults=40&key=${process.env.REACT_APP_GOOGLE_API}`;
 
@@ -27,20 +27,27 @@ const Isbngetter = ({ isbnSearch }) => {
     });
   }, [isbnSearch]);
 
-  let content = books.map((book) => <Isbnbook volumeInfo={book.volumeInfo} />);
+  let content = books.map((book) => (
+    <Book
+      book={book.volumeInfo}
+      key={book.volumeInfo.industryIdentifiers[0].identifier}
+      setBook={setBook}
+      includeButton={true}
+      setGoogleBooksOpen={setGoogleBooksOpen}
+    />
+  ));
 
-  const first10 = [...content];
-  first10.length = Math.min(first10.length, 10);
+  const first20 = [...content];
+  first20.length = Math.min(first20.length, 20);
 
   return (
     <>
-      <h4>Isbngetter!!!</h4>
-      <ul>{first10}</ul>
+      <div id="isbnScroller">{first20}</div>
     </>
   );
 };
 
-export default Isbngetter;
+export default Googlebooks;
 
 //We've got an array of 10 objects returning
 //Object.volumeInfo.industryIdentifiers array contains objects showing if got an isbn or not. We want {

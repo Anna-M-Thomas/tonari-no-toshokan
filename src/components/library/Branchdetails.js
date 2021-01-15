@@ -1,9 +1,9 @@
 import React from "react";
-import libraryCode from "../assets/libraryCode";
+import libraryCode from "../../assets/libraryCode";
 
 //Gets info about individual library from object and renders as part of a list
 //libraryCode changes library type code (BM etc) to words (BM --> bookmobile)
-function Librarydetails({ data, category }) {
+function Branchdetails({ data, category }) {
   const list = data
     .filter((object) => object.systemid === category)
     .map((object) => (
@@ -19,13 +19,18 @@ function Librarydetails({ data, category }) {
         <a
           href={`http://www.google.com/maps?q=(${object.formal})&ll==&z=15`}
           target="_blank"
+          rel="noreferrer"
         >
           Map link
         </a>{" "}
-        <a href={object.url_pc} target="_blank">
+        <a href={object.url_pc} target="_blank" rel="noreferrer">
           Website
         </a>{" "}
-        <a href={`https://calil.jp/library/${object.libid}`} target="_blank">
+        <a
+          href={`https://calil.jp/library/${object.libid}`}
+          target="_blank"
+          rel="noreferrer"
+        >
           Calil page
         </a>
       </li>
@@ -33,7 +38,7 @@ function Librarydetails({ data, category }) {
   return list;
 }
 
-export default Librarydetails;
+export default Branchdetails;
 
 //I think a Google maps link would be this http://www.google.com/maps?q=(${object.formal})&ll==&z=15
 
