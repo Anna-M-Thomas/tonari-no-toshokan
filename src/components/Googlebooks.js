@@ -1,14 +1,14 @@
-import react, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Request from "axios-request-handler";
 import Book from "./Book";
 
-const Googlebooks = ({ isbnSearch, setBook, setGoogleBooksOpen }) => {
+const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
   const [books, setBooks] = useState([]);
-  const baseURL = `https://www.googleapis.com/books/v1/volumes?q=${isbnSearch}&fields=items(volumeInfo)&maxResults=40&key=${process.env.REACT_APP_GOOGLE_API}`;
+  const baseURL = `https://www.googleapis.com/books/v1/volumes?q=${googleBooksQuery}&fields=items(volumeInfo)&maxResults=40&key=${process.env.REACT_APP_GOOGLE_API}`;
 
   useEffect(() => {
-    if (!isbnSearch) {
-      console.log("isbnSearch is still empty");
+    if (!googleBooksQuery) {
+      console.log("No google books query yet, no search");
       return;
     }
     const requestInstance = new Request(baseURL);
@@ -25,7 +25,7 @@ const Googlebooks = ({ isbnSearch, setBook, setGoogleBooksOpen }) => {
       });
       setBooks(hasISBN);
     });
-  }, [isbnSearch]);
+  }, [googleBooksQuery]);
 
   let content = books.map((book) => (
     <Book
@@ -37,12 +37,9 @@ const Googlebooks = ({ isbnSearch, setBook, setGoogleBooksOpen }) => {
     />
   ));
 
-  const first20 = [...content];
-  first20.length = Math.min(first20.length, 20);
-
   return (
     <>
-      <div id="isbnScroller">{first20}</div>
+      <div id="isbnScroller">{content}</div>
     </>
   );
 };

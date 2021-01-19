@@ -1,8 +1,8 @@
 const libraryCode = {
   BM: "Bookmobile",
-  SMALL: "Small: Library room/community center",
-  MEDIUM: "Medium: Local library",
-  LARGE: "Large: Wider-area library",
+  SMALL: "Small library room/community center",
+  MEDIUM: "Medium local library",
+  LARGE: "Large wider-area library",
   UNIV: "University library",
   SPECIAL: "Specialized library",
 };

@@ -1,83 +1,75 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Librarybooks from "./components/Librarybooks";
-import Book from "./components/Book";
 import Googlebooks from "./components/Googlebooks";
 
-function Booksearch({
-  selected,
-  book,
-  setBook,
-  googleBooksOpen,
-  setGoogleBooksOpen,
-}) {
+function Booksearch({ selectedLibraries, book, setBook }) {
   const [googleBooksQuery, setGoogleBooksQuery] = useState("");
-  const [isbnSearch, setIsbnSearch] = useState("");
-  const [search, setSearch] = useState([]);
+  const [googleBooksOpen, setGoogleBooksOpen] = useState(false);
+  const [libraryBookSearch, setLibraryBookSearch] = useState([]);
+  const [libraryBooksOpen, setLibraryBooksOpen] = useState(false);
 
   function handleChangeQuery(event) {
+    setGoogleBooksOpen(false);
     setGoogleBooksQuery(event.target.value);
   }
 
-  function handleIsbnQuery(event) {
+  function handleGoogleBooksSearch(event) {
     event.preventDefault();
     if (googleBooksQuery) {
-      setIsbnSearch(googleBooksQuery);
       setGoogleBooksOpen(true);
+      setLibraryBooksOpen(false);
     }
   }
 
   function handleLibraryBookSearch(event) {
     event.preventDefault();
-    if (book) {
-      let newArray = selected.map((library) => {
+    if (Object.keys(book).length > 0 && selectedLibraries) {
+      let newArray = selectedLibraries.map((library) => {
         return {
-          systemid: library,
+          systemid: library.systemid,
           isbn: book.industryIdentifiers[0].identifier,
         };
       });
-      setSearch(newArray);
+      setLibraryBookSearch(newArray);
+      setLibraryBooksOpen(true);
     }
   }
 
+  let searchResults = libraryBookSearch.map((library) => (
+    <Librarybooks search={library} key={library.systemid} />
+  ));
+
   return (
-    <div className="Book">
-      <div className="bookTop">
-        <div className="selectedBook">
-          <p>Selected book:</p>
-          <Book book={book} setBook={setBook} includeButton={false} />
-          <form onSubmit={handleIsbnQuery}>
-            <label>
-              Search for another book
-              <input
-                type="text"
-                name="isbnSearch"
-                placeholder="Search..."
-                onChange={handleChangeQuery}
-              />
-            </label>
-            <button type="submit">Enter</button>
-          </form>
-        </div>
-        {googleBooksOpen ? (
-          <Googlebooks
-            isbnSearch={isbnSearch}
-            setBook={setBook}
-            setGoogleBooksOpen={setGoogleBooksOpen}
-          />
-        ) : (
-          ""
-        )}
+    <>
+      <div className="topbar">
+        <form onSubmit={handleGoogleBooksSearch}>
+          <label className="bold">
+            Select a new book{" "}
+            <input
+              type="text"
+              name="googleBook"
+              placeholder="Search..."
+              onChange={handleChangeQuery}
+            />
+          </label>
+          <button type="submit">Enter</button>
+        </form>
       </div>
-      <form onSubmit={handleLibraryBookSearch} id="search_library_for_book">
-        <button type="submit" form="search_library_for_book">
-          Search for book
-        </button>
-      </form>
-      <br />
-      {search.map((library) => (
-        <Librarybooks search={library} key={library.systemid} />
-      ))}
-    </div>
+      {!googleBooksOpen && (
+        <form onSubmit={handleLibraryBookSearch} className="topbar">
+          <button type="submit">Search libraries for your book</button>
+        </form>
+      )}
+
+      {googleBooksOpen && (
+        <Googlebooks
+          googleBooksQuery={googleBooksQuery}
+          setBook={setBook}
+          setGoogleBooksOpen={setGoogleBooksOpen}
+        />
+      )}
+      {libraryBooksOpen && <ul>{searchResults}</ul>}
+    </>
   );
 }
 

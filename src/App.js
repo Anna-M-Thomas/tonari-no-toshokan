@@ -1,42 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Librarysearch from "./Librarysearch";
 import Booksearch from "./Booksearch";
 import Header from "./components/Header";
 
 const App = () => {
   const [mode, changeMode] = useState("book");
-
-  const saveditems = JSON.parse(localStorage.getItem("selected"));
+  const savedlibraries = JSON.parse(localStorage.getItem("library"));
   const savedbook = JSON.parse(localStorage.getItem("book"));
-  const [selected, setSelected] = useState(saveditems || []);
-  const [isbn, setISBN] = useState("");
+  const [selectedLibraries, setSelectedLibraries] = useState(
+    savedlibraries || []
+  );
   const [book, setBook] = useState(savedbook || {});
-  const [googleBooksOpen, setGoogleBooksOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("library", JSON.stringify(selectedLibraries));
+    localStorage.setItem("book", JSON.stringify(book));
+  }, [selectedLibraries, book]);
 
   return (
     <>
       <Header
         changeMode={changeMode}
-        selected={selected}
-        setSelected={setSelected}
+        mode={mode}
+        selectedLibraries={selectedLibraries}
+        setSelectedLibraries={setSelectedLibraries}
+        book={book}
+        setBook={setBook}
       />
       <main className="container">
         {mode === "library" ? (
           <Librarysearch
-            selected={selected}
-            isbn={isbn}
-            setSelected={setSelected}
+            selectedLibraries={selectedLibraries}
+            setSelectedLibraries={setSelectedLibraries}
             book={book}
           />
         ) : (
           <Booksearch
-            selected={selected}
-            isbn={isbn}
-            setISBN={setISBN}
+            selectedLibraries={selectedLibraries}
             book={book}
             setBook={setBook}
-            googleBooksOpen={googleBooksOpen}
-            setGoogleBooksOpen={setGoogleBooksOpen}
           />
         )}
       </main>

@@ -3,29 +3,30 @@ import libraryCode from "../../assets/libraryCode";
 
 //Gets info about individual library from object and renders as part of a list
 //libraryCode changes library type code (BM etc) to words (BM --> bookmobile)
-function Branchdetails({ data, category }) {
-  const list = data
+function Branchdetails({ libraries, category }) {
+  const list = libraries
     .filter((object) => object.systemid === category)
     .map((object) => (
-      <li key={object.libid}>
-        <p>Name (Japanese): {object.formal}</p>
-        <p>
-          <img
-            src={`https://calil.jp/public/img/libicon/${object.category}.png`}
-            alt={`${libraryCode[object.category]}icon`}
-          />{" "}
-          {libraryCode[object.category]}{" "}
-        </p>
+      <li key={object.libid} className="branchDetails">
+        {object.formal}
+        {"  "}
+        <img
+          src={`https://calil.jp/public/img/libicon/${object.category}.png`}
+          alt={`${libraryCode[object.category]}icon`}
+        />
+        {libraryCode[object.category]}{" "}
         <a
           href={`http://www.google.com/maps?q=(${object.formal})&ll==&z=15`}
           target="_blank"
           rel="noreferrer"
         >
           Map link
-        </a>{" "}
+        </a>
+        {"   "}
         <a href={object.url_pc} target="_blank" rel="noreferrer">
           Website
-        </a>{" "}
+        </a>
+        {"   "}
         <a
           href={`https://calil.jp/library/${object.libid}`}
           target="_blank"

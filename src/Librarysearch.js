@@ -3,72 +3,70 @@ import Libraries from "./components/library/Libraries";
 import prefectures from "./assets/prefectures";
 import axios from "axios";
 
-function Librarysearch({ selected, setSelected, isbn, book }) {
+function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
   const [libraries, setLibraries] = useState([]);
-  const [search, setSearch] = useState({ name_jp: "", name_en: "..." });
+  const [prefecture, setPrefecture] = useState({ name_jp: "", name_en: "..." });
 
-  console.log(
-    "Does book exist?",
-    Object.keys(book).length !== 0
-      ? `Yes. The isbn is${book.industryIdentifiers[0].identifier} and the title is ${book.title}`
-      : "No"
-  );
-  console.log("Selected ISBN:", isbn ? isbn : "...");
-
+  //Handles change to prefecture select bar
   function handleChange(event) {
     const selectedPrefecture = prefectures.find(
       (prefecture) => prefecture.name_jp === event.target.value
     );
-    setSearch(selectedPrefecture);
+    setPrefecture(selectedPrefecture);
   }
 
   useEffect(() => {
-    if (search.name_jp) {
+    if (prefecture.name_jp) {
       axios
         .get(
-          `https://api.calil.jp/library?appkey=${process.env.REACT_APP_API_KEY}&pref=${search.name_jp}&format=json&callback=`,
+          `https://api.calil.jp/library?appkey=${process.env.REACT_APP_API_KEY}&pref=${prefecture.name_jp}&format=json&callback=`,
           { mode: "cors" }
         )
         .then((response) => {
           setLibraries(response.data);
         });
     }
-  }, [search]);
+  }, [prefecture]);
 
-  useEffect(() => {
-    localStorage.setItem("selected", JSON.stringify(selected));
-  }, [selected]);
-
-  function addSelected(event) {
+  function addSelectedLibrary(event) {
     const newSelected = event.target.dataset.systemid;
-    const inArray = selected.some((library) => library === newSelected);
+    //if library is already selected it won't be added again
+    const libraryObject = libraries.find(
+      (library) => library.systemid === newSelected
+    );
+    console.log(libraryObject);
+    const inArray = selectedLibraries.some(
+      (library) => library.systemid === newSelected
+    );
     if (!inArray) {
-      setSelected(selected.concat(newSelected));
+      setSelectedLibraries(selectedLibraries.concat(libraryObject));
     }
   }
 
-  const options = prefectures.map((prefecture, index) => (
-    <option value={prefecture.name_jp} key={index}>
-      {prefecture.name_en}
-    </option>
-  ));
-
   return (
-    <div className="library">
-      <div className="libraryTop">
-        <h2>Find a library</h2>
+    <>
+      <div className="topbar">
+        <div className="bold">Find a library</div>
         <form>
           <select
             className="select-css"
-            value={search.name_jp}
+            value={prefecture.name_jp}
             onChange={handleChange}
           >
-            {options}
+            {prefectures.map((prefecture, index) => (
+              <option value={prefecture.name_jp} key={index}>
+                {prefecture.name_en}
+              </option>
+            ))}
           </select>
         </form>
       </div>
-      <Libraries addSelected={addSelected} data={libraries} />
-    </div>
+
+      <Libraries
+        addSelectedLibrary={addSelectedLibrary}
+        libraries={libraries}
+      />
+    </>
   );
 }
 

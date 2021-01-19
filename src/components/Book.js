@@ -1,36 +1,31 @@
-import react from "react";
+import React from "react";
 
 const Book = ({ book, setBook, includeButton, setGoogleBooksOpen }) => {
-  if (Object.keys(book).length > 0)
+  if (Object.keys(book).length > 0) {
     return (
-      <div className="isbnBook">
-        {book.title}
-        <br />
+      <div className="book">
+        <strong>{book.title}</strong>
         {book.hasOwnProperty("imageLinks") ? (
-          <img src={`${book.imageLinks.smallThumbnail}`} />
+          <img className="bookImg" src={`${book.imageLinks.smallThumbnail}`} />
         ) : (
           ""
         )}
-        <br />
-        Author(s): {book.authors}
-        <br />
-        ISBN: {book.industryIdentifiers[0].identifier}
+        By {book.authors ? book.authors.slice(0, 3).join(", ") : "..."}
         {includeButton ? (
           <button
             onClick={() => {
               setBook(book);
               setGoogleBooksOpen(false);
-              localStorage.setItem("book", JSON.stringify(book));
             }}
           >
-            Set book
+            Choose
           </button>
         ) : (
           ""
         )}
       </div>
     );
-  else return <div></div>;
+  } else return <div></div>;
 };
 
 export default Book;
