@@ -34,11 +34,9 @@ const Header = ({
             alt="bookmobile"
             src="./car_book_idou_tosyokan.png"
           />
-          <h1>
-            <button onClick={handleLibraryClick}>Choose libraries</button>
-            Tonari no Toshokan{" "}
-            <button onClick={handleBookClick}>Search for a book</button>
-          </h1>
+          <button onClick={handleLibraryClick}>Choose libraries</button>
+          <h1>Tonari no Toshokan </h1>
+          <button onClick={handleBookClick}>Search for a book</button>
           <img className="headerImg" alt="book" src="./book_yoko.png" />
         </div>
       </div>

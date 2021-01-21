@@ -35,7 +35,6 @@ code {
 }
 
 .bold {
-  font-size: 1.5em;
   margin-left: 0;
   margin-right: 0;
   font-weight: bold;
@@ -57,7 +56,7 @@ code {
 }
 
 .headerImg {
-  width: 70px;
+  width: 4rem;
 }
 
 #header {
@@ -66,11 +65,10 @@ code {
   justify-content: center;
   align-items: center;
   background-color: lightblue;
-  height: 70px;
+  height: 4rem;
 }
 
 #headerContainer {
-  top: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -83,7 +81,7 @@ code {
 }
 
 button {
-  border: 1px solid #aaa;
+  border: solid 1px gray;
   background-color: #e3f3ff;
   padding: 5px 10px;
   border-radius: 4px;
@@ -93,21 +91,45 @@ button {
   margin-right: 8px;
 }
 
+button:hover {
+  background-color: #c2e4fd;
+}
+
 .alertButton {
-  background-color: #f7b2bf;
+  background-color: #ffd0d8;
   padding: 3px 5px;
 }
 
-.isbnSearchBar {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.alertButton:hover {
+  background-color: #f5aab8;
 }
 
 .topbar {
   width: 100%;
-  padding-top: 5px;
+  padding-left: 1%;
+  padding-right: 1%;
+  padding-top: 1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.about {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  padding-right: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+a {
+  color: gray;
+}
+
+.isbnSearchBar {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,34 +154,12 @@ button {
 ul {
   list-style-type: none;
   text-align: center;
+  padding-left: 0;
 }
-/*
-.details {
-  display: flex;
-  flex-wrap: wrap;
-}*/
 
 li {
   margin: 0.5rem;
 }
-
-/*
-.details li {
-  text-align: center;
-  padding: 1rem;
-  margin: 0;
-  max-width: 20rem;
-} 
-*/
-/*
-.details {
-  display: grid;
-}
-
-.branchDetails {
-  display: flex;
-  justify-content: space-evenly;
-}*/
 
 .hidden {
   display: none;
@@ -195,4 +195,26 @@ for the icon, if you want to change the color, be sure to use `%23` instead of `
   background-position: right 0.7em top 50%, 0 0;
   /* icon size, then gradient */
   background-size: 0.65em auto, 100%;
+}
+
+@media all and (max-width: 800px) {
+  #header {
+    align-items: center;
+    height: auto;
+    padding: 1%;
+  }
+
+  #header img,
+  h1,
+  a {
+    display: none;
+  }
+
+  .bottombar {
+    display: none;
+  }
+
+  /* #header h1 {
+    display: none;
+  } */
 }

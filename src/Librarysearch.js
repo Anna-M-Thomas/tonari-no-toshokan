@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Libraries from "./components/library/Libraries";
+import Libraries from "./components/Libraries";
 import prefectures from "./assets/prefectures";
 import axios from "axios";
 

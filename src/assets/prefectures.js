@@ -49,3 +49,7 @@ const prefectures = [
 ];
 
 export default prefectures;
+
+//name_jp is for the actual query going to Calil api 
+//http://api.calil.jp/library?appkey={あなたのアプリキー}&pref=埼玉県
+//name_en is what shows up in the menu

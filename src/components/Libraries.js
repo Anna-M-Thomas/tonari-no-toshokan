@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Branchdetails from "./Branchdetails";
 
-//Each Library component is actually a group of libraries (in that municipality, college, whatever)
 const Library = ({ index, category, addSelectedLibrary, libraries }) => {
   const [open, setOpen] = useState(false);
 
+  //Toggles details for that library system open or closed
   const toggleDetails = (event) => {
     const details = document.getElementById(`${category}`);
     details.classList.toggle("hidden");
@@ -33,4 +33,29 @@ const Library = ({ index, category, addSelectedLibrary, libraries }) => {
   );
 };
 
-export default Library;
+//System id is shared by libraries in the same system (town, university, other)
+//This makes categories for all system ids in the selected prefecture
+//Each category gets its own Library component (see above)
+const Libraries = ({ libraries, addSelectedLibrary }) => {
+  function getList() {
+    let categories = [];
+    for (let i = 1; i < libraries.length; i++) {
+      const city = libraries[i].systemid;
+      if (categories.indexOf(city) === -1) categories.push(city);
+    }
+
+    return categories.map((category, index) => (
+      <Library
+        key={index}
+        index={index}
+        category={category}
+        addSelectedLibrary={addSelectedLibrary}
+        libraries={libraries}
+      />
+    ));
+  }
+
+  return libraries.length ? <ul>{getList()}</ul> : <ul></ul>;
+};
+
+export default Libraries;

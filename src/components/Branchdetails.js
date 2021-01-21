@@ -1,5 +1,5 @@
 import React from "react";
-import libraryCode from "../../assets/libraryCode";
+import libraryCode from "../assets/libraryCode";
 
 //Gets info about individual library from object and renders as part of a list
 //libraryCode changes library type code (BM etc) to words (BM --> bookmobile)

@@ -1,6 +1,9 @@
 import React from "react";
 
-const Book = ({ book, setBook, includeButton, setGoogleBooksOpen }) => {
+const Book = ({ book, setBook, setGoogleBooksOpen }) => {
+  //Gets passed the volumeinfo part of book object.
+  //Choosing any book (with setBook) closes the google books panel for selecting book
+  //If I check for !book it doesn't work, I guess an empty object isn't falsey enough
   if (Object.keys(book).length > 0) {
     return (
       <div className="book">
@@ -11,18 +14,14 @@ const Book = ({ book, setBook, includeButton, setGoogleBooksOpen }) => {
           ""
         )}
         By {book.authors ? book.authors.slice(0, 3).join(", ") : "..."}
-        {includeButton ? (
-          <button
-            onClick={() => {
-              setBook(book);
-              setGoogleBooksOpen(false);
-            }}
-          >
-            Choose
-          </button>
-        ) : (
-          ""
-        )}
+        <button
+          onClick={() => {
+            setBook(book);
+            setGoogleBooksOpen(false);
+          }}
+        >
+          Choose
+        </button>
       </div>
     );
   } else return <div></div>;
@@ -30,9 +29,8 @@ const Book = ({ book, setBook, includeButton, setGoogleBooksOpen }) => {
 
 export default Book;
 
-//Just feed this one volumeInfo
 // volumeInfo.title (string)
 // volumeInfo.authors (array)
 // volumeInfo.industryIdentifiers (array but just use [0])
-// volumeInfo.imageLinks.smallThumbnail and .thumbnail This doesn't exist for some ummmm
-//Conditionally render a pic in there using nameofobject.hasOwnProperty(imageLinks);
+// volumeInfo.imageLinks.smallThumbnail and .thumbnail
+// It's possible some of these won't exist, especially image links

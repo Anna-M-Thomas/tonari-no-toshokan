@@ -4,16 +4,17 @@ import Book from "./Book";
 
 const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
   const [books, setBooks] = useState([]);
+  //Asks for 40 results, max possible, and only the "volumeInfo" part
   const baseURL = `https://www.googleapis.com/books/v1/volumes?q=${googleBooksQuery}&fields=items(volumeInfo)&maxResults=40&key=${process.env.REACT_APP_GOOGLE_API}`;
 
   useEffect(() => {
-    if (!googleBooksQuery) {
-      console.log("No google books query yet, no search");
-      return;
-    }
     const requestInstance = new Request(baseURL);
+
+    //I can only use books with an ISBN #
+    //Filter for books that have industry identifier.
+    //Then filter for books that have either ISBN 13 or ISBN 10
+    //A book object containing an industryIdentifier array containing objects
     requestInstance.get().then((res) => {
-      console.log("Reponse data items", res.data.items);
       let hasIndustryIden = res.data.items.filter(
         (object) => "industryIdentifiers" in object.volumeInfo
       );
@@ -27,12 +28,13 @@ const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
     });
   }, [googleBooksQuery]);
 
+  //I only need industryIdentifiers[0], either ISBN 10 or 13 will work
+  //and it should have at least one of those
   let content = books.map((book) => (
     <Book
       book={book.volumeInfo}
       key={book.volumeInfo.industryIdentifiers[0].identifier}
       setBook={setBook}
-      includeButton={true}
       setGoogleBooksOpen={setGoogleBooksOpen}
     />
   ));
@@ -46,8 +48,8 @@ const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
 
 export default Googlebooks;
 
-//We've got an array of 10 objects returning
-//Object.volumeInfo.industryIdentifiers array contains objects showing if got an isbn or not. We want {
+//Object.volumeInfo.industryIdentifiers samples
+// {
 //     "type": "ISBN_13",
 //     "identifier": "9781481414784"
 

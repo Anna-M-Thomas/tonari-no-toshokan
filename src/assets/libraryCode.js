@@ -8,3 +8,4 @@ const libraryCode = {
 };
 
 export default libraryCode;
+//Converts library categories to something easier to understand

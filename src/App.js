@@ -41,6 +41,15 @@ const App = () => {
             setBook={setBook}
           />
         )}
+        <div className="about">
+          <a
+            href="https://github.com/sacchan9/tonari-no-toshokan/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <i className="fab fa-github"></i> About
+          </a>
+        </div>
       </main>
     </>
   );
