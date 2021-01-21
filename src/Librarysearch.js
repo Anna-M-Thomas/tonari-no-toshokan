@@ -19,13 +19,18 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
 
   useEffect(() => {
     if (prefecture.name_jp) {
-      const requestInstance = new Request(baseURL);
+      const requestInstance = new Request(baseURL, {
+        params: {
+          pref: `${prefecture.name_jp}`,
+          format: `json`,
+          callback: ``,
+          mode: "cors",
+        },
+      });
 
-      requestInstance
-        .get(`&pref=${prefecture.name_jp}&format=json&callback=`)
-        .then((response) => {
-          setLibraries(response.data);
-        });
+      requestInstance.get().then((response) => {
+        setLibraries(response.data);
+      });
     }
   }, [prefecture]);
 
