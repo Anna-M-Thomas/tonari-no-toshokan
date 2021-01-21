@@ -18,10 +18,15 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
   useEffect(() => {
     if (prefecture.name_jp) {
       axios
+        // .get(
+        //   `https://api.calil.jp/library?appkey=${process.env.REACT_APP_API_KEY}&pref=${prefecture.name_jp}&format=json&callback=`,
+        //   { mode: "cors" }
+        // )
         .get(
-          `https://api.calil.jp/library?appkey=${process.env.REACT_APP_API_KEY}&pref=${prefecture.name_jp}&format=json&callback=`,
+          `https://hidden-plains-37239.herokuapp.com/library&pref=${prefecture.name_jp}&format=json&callback=`,
           { mode: "cors" }
         )
+
         .then((response) => {
           setLibraries(response.data);
         });
