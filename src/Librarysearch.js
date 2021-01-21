@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Libraries from "./components/Libraries";
 import prefectures from "./assets/prefectures";
+import Request from "axios-request-handler";
 import axios from "axios";
 
 function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
   const [libraries, setLibraries] = useState([]);
   const [prefecture, setPrefecture] = useState({ name_jp: "", name_en: "..." });
+  const baseURL = "https://hidden-plains-37239.herokuapp.com/library";
 
   //Handles change to prefecture select bar
   function handleChange(event) {
@@ -17,16 +19,10 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
 
   useEffect(() => {
     if (prefecture.name_jp) {
-      axios
-        // .get(
-        //   `https://api.calil.jp/library?appkey=${process.env.REACT_APP_API_KEY}&pref=${prefecture.name_jp}&format=json&callback=`,
-        //   { mode: "cors" }
-        // )
-        .get(
-          `https://hidden-plains-37239.herokuapp.com/library&pref=${prefecture.name_jp}&format=json&callback=`,
-          { mode: "cors" }
-        )
+      const requestInstance = new Request(baseURL);
 
+      requestInstance
+        .get(`&pref=${prefecture.name_jp}&format=json&callback=`)
         .then((response) => {
           setLibraries(response.data);
         });

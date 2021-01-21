@@ -16,7 +16,7 @@ const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
     //Then filter for books that have either ISBN 13 or ISBN 10
     //A book object containing an industryIdentifier array containing objects
     requestInstance
-      .get("?q=${googleBooksQuery}&fields=items(volumeInfo)&maxResults=40")
+      .get(`?q=${googleBooksQuery}&fields=items(volumeInfo)&maxResults=40`)
       .then((res) => {
         let hasIndustryIden = res.data.items.filter(
           (object) => "industryIdentifiers" in object.volumeInfo
