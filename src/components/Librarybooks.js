@@ -8,7 +8,7 @@ const Librarybooks = ({ search }) => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const baseURL = "https://hidden-plains-37239.herokuapp.com/librarybook";
+  const baseURL = "https://hidden-plains-37239.herokuapp.com/test";
 
   //startPolling is its own function that request will start running when needed
   const startPolling = (session) => {
@@ -17,7 +17,6 @@ const Librarybooks = ({ search }) => {
         session: `${session}`,
         format: `json`,
         callback: `no`,
-        // mode: "cors",
       },
     });
     //Polling has to wait at least two seconds between tries.
@@ -48,7 +47,6 @@ const Librarybooks = ({ search }) => {
         systemid: `${search.systemid}`,
         format: `json`,
         callback: `no`,
-        // mode: "cors",
       },
     });
 
