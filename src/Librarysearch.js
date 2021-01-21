@@ -7,6 +7,7 @@ import axios from "axios";
 function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
   const [libraries, setLibraries] = useState([]);
   const [prefecture, setPrefecture] = useState({ name_jp: "", name_en: "..." });
+  // URL is https://api.calil.jp/library, using API-key-proxy-server
   const baseURL = "https://hidden-plains-37239.herokuapp.com/library";
 
   //Handles change to prefecture select bar

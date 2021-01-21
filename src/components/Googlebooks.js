@@ -5,7 +5,8 @@ import Book from "./Book";
 const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
   const [books, setBooks] = useState([]);
   //Asks for 40 results, max possible, and only the "volumeInfo" part
-  // const baseURL = `https://www.googleapis.com/books/v1/volumes?q=${googleBooksQuery}&fields=items(volumeInfo)&maxResults=40&key=${process.env.REACT_APP_GOOGLE_API}`;
+  // URL is https://www.googleapis.com/books/v1/volumes?q=${googleBooksQuery}&fields=items(volumeInfo)&maxResults=40&key=${process.env.REACT_APP_GOOGLE_API}`;
+  // Using API-key-proxy-server
   const baseURL = `https://hidden-plains-37239.herokuapp.com/googlebook`;
 
   useEffect(() => {
