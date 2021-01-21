@@ -9,26 +9,30 @@ const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
   const baseURL = `https://hidden-plains-37239.herokuapp.com/googlebook`;
 
   useEffect(() => {
-    const requestInstance = new Request(baseURL);
+    const requestInstance = new Request(baseURL, {
+      params: {
+        q: `${googleBooksQuery}`,
+        fields: `items(volumeInfo)`,
+        maxResults: `40`,
+      },
+    });
 
     //I can only use books with an ISBN #
     //Filter for books that have industry identifier.
     //Then filter for books that have either ISBN 13 or ISBN 10
     //A book object containing an industryIdentifier array containing objects
-    requestInstance
-      .get(`?q=${googleBooksQuery}&fields=items(volumeInfo)&maxResults=40`)
-      .then((res) => {
-        let hasIndustryIden = res.data.items.filter(
-          (object) => "industryIdentifiers" in object.volumeInfo
+    requestInstance.get().then((res) => {
+      let hasIndustryIden = res.data.items.filter(
+        (object) => "industryIdentifiers" in object.volumeInfo
+      );
+      let hasISBN = hasIndustryIden.filter((object) => {
+        let result = object.volumeInfo.industryIdentifiers.some(
+          (object) => object.type === "ISBN_13" || object.type === "ISBN_10"
         );
-        let hasISBN = hasIndustryIden.filter((object) => {
-          let result = object.volumeInfo.industryIdentifiers.some(
-            (object) => object.type === "ISBN_13" || object.type === "ISBN_10"
-          );
-          return result;
-        });
-        setBooks(hasISBN);
+        return result;
       });
+      setBooks(hasISBN);
+    });
   }, [googleBooksQuery]);
 
   //I only need industryIdentifiers[0], either ISBN 10 or 13 will work
