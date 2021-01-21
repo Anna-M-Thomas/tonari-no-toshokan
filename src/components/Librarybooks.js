@@ -14,11 +14,10 @@ const Librarybooks = ({ search }) => {
   const startPolling = (session) => {
     const pollingInstance = new Request(baseURL, {
       params: {
-        // appkey: `${process.env.REACT_APP_API_KEY}`,
         session: `${session}`,
         format: `json`,
         callback: `no`,
-        mode: "cors",
+        // mode: "cors",
       },
     });
     //Polling has to wait at least two seconds between tries.
@@ -45,12 +44,11 @@ const Librarybooks = ({ search }) => {
 
     const requestInstance = new Request(baseURL, {
       params: {
-        // appkey: `${process.env.REACT_APP_API_KEY}`,
         isbn: `${search.isbn}`,
         systemid: `${search.systemid}`,
         format: `json`,
         callback: `no`,
-        mode: "cors",
+        // mode: "cors",
       },
     });
 
