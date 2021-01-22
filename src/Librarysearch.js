@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Libraries from "./components/Libraries";
+import Library from "./components/Library";
 import prefectures from "./assets/prefectures";
 import Request from "axios-request-handler";
-import axios from "axios";
 
 function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
   const [libraries, setLibraries] = useState([]);
@@ -17,6 +16,11 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
     );
     setPrefecture(selectedPrefecture);
   }
+
+  const libraryClearButtonClick = () => {
+    setSelectedLibraries([]);
+    localStorage.setItem("library", JSON.stringify([]));
+  };
 
   useEffect(() => {
     if (prefecture.name_jp) {
@@ -41,7 +45,6 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
     const libraryObject = libraries.find(
       (library) => library.systemid === newSelected
     );
-    console.log(libraryObject);
     const inArray = selectedLibraries.some(
       (library) => library.systemid === newSelected
     );
@@ -50,8 +53,34 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
     }
   }
 
+  const categories = libraries
+    .map((library) => library.systemid)
+    .filter((id, index, array) => {
+      return array.indexOf(id) === index;
+    })
+    .map((category, index) => (
+      <Library
+        key={index}
+        index={index}
+        category={category}
+        addSelectedLibrary={addSelectedLibrary}
+        libraries={libraries}
+      />
+    ));
+
   return (
     <>
+      {selectedLibraries.length > 0 && (
+        <div className="topbar">
+          Selected libraries:{" "}
+          {selectedLibraries
+            .map((item) => item.systemid.replace("_", " "))
+            .join(", ")}
+          <button onClick={libraryClearButtonClick} className="alertButton">
+            Clear
+          </button>{" "}
+        </div>
+      )}
       <div className="topbar">
         <div className="bold">Find a library</div>
         <form>
@@ -68,11 +97,7 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
           </select>
         </form>
       </div>
-
-      <Libraries
-        addSelectedLibrary={addSelectedLibrary}
-        libraries={libraries}
-      />
+      {libraries.length ? <ul>{categories}</ul> : ""}
     </>
   );
 }

@@ -45,6 +45,7 @@ code {
   padding: 1rem;
   display: flex;
   text-align: center;
+  align-items: center;
   word-wrap: break-word;
   justify-content: space-between;
   flex-direction: column;
@@ -53,6 +54,7 @@ code {
 .bookImg {
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  width: 8rem;
 }
 
 .headerImg {
@@ -91,17 +93,9 @@ button {
   margin-right: 8px;
 }
 
-button:hover {
-  background-color: #c2e4fd;
-}
-
 .alertButton {
   background-color: #ffd0d8;
   padding: 3px 5px;
-}
-
-.alertButton:hover {
-  background-color: #f5aab8;
 }
 
 .topbar {

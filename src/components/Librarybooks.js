@@ -10,8 +10,8 @@ const Librarybooks = ({ search }) => {
 
   // Usual URL is https://api.calil.jp/check, using API-key-proxy-server
   //I made the mistake of naming API-key-proxy-server routes /library and /librarybook
-  //Which is a bad idea! Everything was going to /library. I tried test and it worked
-  //Test isn't a bad name, I'll just keep it
+  //Which is a bad idea! Everything was going to /library and then failing. I tried test and it worked
+  //Test isn't a bad name, I'll keep it!
   const baseURL = "https://hidden-plains-37239.herokuapp.com/test";
 
   //startPolling is its own function that request will start running when needed

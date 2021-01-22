@@ -47,7 +47,7 @@ const App = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <i className="fab fa-github"></i> About
+            About
           </a>
         </div>
       </main>
