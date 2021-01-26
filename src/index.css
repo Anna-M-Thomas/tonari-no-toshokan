@@ -52,8 +52,6 @@ code {
 }
 
 .bookImg {
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   width: 8rem;
 }
 
@@ -155,10 +153,6 @@ li {
   margin: 0.5rem;
 }
 
-.hidden {
-  display: none;
-}
-
 /* class applies to select element itself, not a wrapper element */
 .select-css {
   font-size: 16px;
@@ -207,8 +201,4 @@ for the icon, if you want to change the color, be sure to use `%23` instead of `
   .bottombar {
     display: none;
   }
-
-  /* #header h1 {
-    display: none;
-  } */
 }

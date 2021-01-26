@@ -1,28 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Library from "./components/Library";
 import prefectures from "./assets/prefectures";
 import Request from "axios-request-handler";
 
 function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
-  const [libraries, setLibraries] = useState([]);
-  const [prefecture, setPrefecture] = useState({ name_jp: "", name_en: "..." });
+  const libraries = useRef([]);
+  const [prefecture, updatePrefecture] = useState({
+    name_jp: "",
+    name_en: "...",
+  });
+  const [isLoading, updateIsLoading] = useState(false);
+
   // URL is https://api.calil.jp/library, using API-key-proxy-server
-  const baseURL = "https://hidden-plains-37239.herokuapp.com/library";
+  // const baseURL = "https://hidden-plains-37239.herokuapp.com/library";
+  const baseURL =
+    "https://cors-anywhere.herokuapp.com/https://api.calil.jp/library";
 
   //Handles change to prefecture select bar
   function handleChange(event) {
     const selectedPrefecture = prefectures.find(
       (prefecture) => prefecture.name_jp === event.target.value
     );
-    setPrefecture(selectedPrefecture);
+    updatePrefecture(selectedPrefecture);
   }
 
   const libraryClearButtonClick = () => {
     setSelectedLibraries([]);
-    localStorage.setItem("library", JSON.stringify([]));
   };
 
   useEffect(() => {
+    console.log("I've been called");
     if (prefecture.name_jp) {
       const requestInstance = new Request(baseURL, {
         params: {
@@ -33,8 +40,12 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
         },
       });
 
+      updateIsLoading(true);
+
       requestInstance.get().then((response) => {
-        setLibraries(response.data);
+        libraries.current = response.data;
+        console.log("Libraries current", libraries.current);
+        updateIsLoading(false);
       });
     }
   }, [prefecture]);
@@ -42,40 +53,45 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
   function addSelectedLibrary(event) {
     const newSelected = event.target.dataset.systemid;
     //if library is already selected it won't be added again
-    const libraryObject = libraries.find(
-      (library) => library.systemid === newSelected
-    );
     const inArray = selectedLibraries.some(
-      (library) => library.systemid === newSelected
+      (library) => library === newSelected
     );
     if (!inArray) {
-      setSelectedLibraries(selectedLibraries.concat(libraryObject));
+      setSelectedLibraries(selectedLibraries.concat(newSelected));
     }
   }
 
-  const categories = libraries
+  //returns the system ids
+  const categories = libraries.current
     .map((library) => library.systemid)
+    //filters out duplicate system ids
     .filter((id, index, array) => {
       return array.indexOf(id) === index;
     })
-    .map((category, index) => (
-      <Library
-        key={index}
-        index={index}
-        category={category}
-        addSelectedLibrary={addSelectedLibrary}
-        libraries={libraries}
-      />
-    ));
+    //Pass on *just* category name and the relevant libraries
+    .map((category, index) => {
+      const currentLibrary = libraries.current.filter(
+        (object) => object.systemid === category
+      );
+      return (
+        <Library
+          key={index}
+          index={index}
+          category={category}
+          addSelectedLibrary={addSelectedLibrary}
+          currentLibrary={currentLibrary}
+        />
+      );
+    });
+
+  console.log("categories", categories);
 
   return (
     <>
       {selectedLibraries.length > 0 && (
         <div className="topbar">
           Selected libraries:{" "}
-          {selectedLibraries
-            .map((item) => item.systemid.replace("_", " "))
-            .join(", ")}
+          {selectedLibraries.map((item) => item.replace("_", " ")).join(", ")}
           <button onClick={libraryClearButtonClick} className="alertButton">
             Clear
           </button>{" "}
@@ -97,7 +113,7 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
           </select>
         </form>
       </div>
-      {libraries.length ? <ul>{categories}</ul> : ""}
+      {isLoading ? "" : <ul>{categories}</ul>}
     </>
   );
 }

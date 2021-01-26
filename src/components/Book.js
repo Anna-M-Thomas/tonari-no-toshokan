@@ -1,6 +1,13 @@
 import React from "react";
 
 const Book = ({ book, setBook, setGoogleBooksOpen }) => {
+  const clickHandler = () => {
+    setBook({
+      title: book.title,
+      isbn: book.industryIdentifiers[0].identifier,
+    });
+    setGoogleBooksOpen(false);
+  };
   //Gets passed the volumeinfo part of book object.
   //Choosing any book (with setBook) closes the google books panel for selecting book
   //If I check for !book it doesn't work, I guess an empty object isn't falsey enough
@@ -14,14 +21,7 @@ const Book = ({ book, setBook, setGoogleBooksOpen }) => {
           ""
         )}
         By {book.authors ? book.authors.slice(0, 3).join(", ") : "..."}
-        <button
-          onClick={() => {
-            setBook(book);
-            setGoogleBooksOpen(false);
-          }}
-        >
-          Choose
-        </button>
+        <button onClick={clickHandler}>Choose</button>
       </div>
     );
   } else return <div></div>;

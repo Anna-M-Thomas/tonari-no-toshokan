@@ -1,23 +1,12 @@
 import React from "react";
 
-const Header = ({
-  changeMode,
-  selectedLibraries,
-  setSelectedLibraries,
-  setBook,
-  book,
-}) => {
+const Header = ({ changeMode }) => {
   const handleLibraryClick = () => {
     changeMode("library");
   };
 
   const handleBookClick = () => {
     changeMode("book");
-  };
-
-  const bookClearButtonClick = () => {
-    setBook({});
-    localStorage.setItem("book", JSON.stringify({}));
   };
 
   return (
@@ -41,19 +30,8 @@ const Header = ({
           </picture>
         </div>
       </div>
-
-      {Object.keys(book).length > 0 ? (
-        <div className="topbar">
-          Selected book: {book.title}
-          <button onClick={bookClearButtonClick} className="alertButton">
-            Clear
-          </button>
-        </div>
-      ) : (
-        <div className="topbar">No book selected yet</div>
-      )}
     </>
   );
 };
 
-export default Header;
+export default React.memo(Header);

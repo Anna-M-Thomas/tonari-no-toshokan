@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Branchdetails from "./Branchdetails";
 
-const Library = ({ index, category, addSelectedLibrary, libraries }) => {
+const Library = ({ index, category, addSelectedLibrary, currentLibrary }) => {
   const [open, setOpen] = useState(false);
 
   const toggleDetails = (event) => {
@@ -26,7 +26,7 @@ const Library = ({ index, category, addSelectedLibrary, libraries }) => {
       {open && (
         <ul className="details">
           Branches:
-          <Branchdetails libraries={libraries} category={category} />
+          <Branchdetails currentLibrary={currentLibrary} />
         </ul>
       )}
     </li>

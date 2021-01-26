@@ -13,6 +13,10 @@ function Booksearch({ selectedLibraries, book, setBook }) {
     setGoogleBooksQuery(event.target.value);
   }
 
+  const bookClearButtonClick = () => {
+    setBook({});
+  };
+
   function handleGoogleBooksSearch(event) {
     event.preventDefault();
     if (googleBooksQuery) {
@@ -23,11 +27,15 @@ function Booksearch({ selectedLibraries, book, setBook }) {
 
   function handleLibraryBookSearch(event) {
     event.preventDefault();
+    console.log("I've been clicked");
+    console.log("first", Object.keys(book).length > 0);
+    console.log("second", selectedLibraries);
     if (Object.keys(book).length > 0 && selectedLibraries) {
+      console.log("Inside handle library book search");
       let newArray = selectedLibraries.map((library) => {
         return {
-          systemid: library.systemid,
-          isbn: book.industryIdentifiers[0].identifier,
+          systemid: library,
+          isbn: book.isbn,
         };
       });
       setLibraryBookSearch(newArray);
@@ -41,6 +49,14 @@ function Booksearch({ selectedLibraries, book, setBook }) {
 
   return (
     <>
+      {Object.keys(book).length > 0 && (
+        <div className="topbar">
+          Selected book: {book.title}
+          <button onClick={bookClearButtonClick} className="alertButton">
+            Clear
+          </button>
+        </div>
+      )}
       <div className="topbar">
         <form onSubmit={handleGoogleBooksSearch}>
           <label className="bold">

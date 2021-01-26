@@ -1,24 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Request from "axios-request-handler";
 import Book from "./Book";
 
 const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
-  const [books, setBooks] = useState([]);
+  const books = useRef([]);
+  const [isLoading, updateIsLoading] = useState(false);
   //Asks for 40 results, max possible, and only the "volumeInfo" part
   // URL is https://www.googleapis.com/books/v1/volumes?q=${googleBooksQuery}&fields=items(volumeInfo)&maxResults=40&key=${process.env.REACT_APP_GOOGLE_API}`;
   // Using API-key-proxy-server
   // const baseURL = `https://hidden-plains-37239.herokuapp.com/googlebook`;
 
   useEffect(() => {
-    const baseURL = `https://hidden-plains-37239.herokuapp.com/googlebook`;
+    const baseURL = `https://www.googleapis.com/books/v1/volumes?q=${googleBooksQuery}&fields=items(volumeInfo)&maxResults=40&key=${process.env.REACT_APP_GOOGLE_API}`;
 
-    const requestInstance = new Request(baseURL, {
-      params: {
-        q: `${googleBooksQuery}`,
-        fields: `items(volumeInfo)`,
-        maxResults: `40`,
-      },
-    });
+    const requestInstance = new Request(baseURL);
+
+    updateIsLoading(true);
+    // const requestInstance = new Request(baseURL, {
+    //   params: {
+    //     q: `${googleBooksQuery}`,
+    //     fields: `items(volumeInfo)`,
+    //     maxResults: `40`,
+    //   },
+    // });
 
     //I can only use books with an ISBN #
     //Filter for books that have industry identifier.
@@ -28,31 +32,30 @@ const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
       const hasIndustryIden = res.data.items.filter(
         (object) => "industryIdentifiers" in object.volumeInfo
       );
-      const hasISBN = hasIndustryIden.filter((object) => {
+      books.current = hasIndustryIden.filter((object) => {
         const result = object.volumeInfo.industryIdentifiers.some(
           (object) => object.type === "ISBN_13" || object.type === "ISBN_10"
         );
         return result;
       });
-      setBooks(hasISBN);
+      updateIsLoading(false);
     });
   }, [googleBooksQuery]);
 
   //I only need industryIdentifiers[0], either ISBN 10 or 13 will work
   //and it should have at least one of those
-  let content = books.map((book) => (
+  let content = books.current.map((book) => (
     <Book
       book={book.volumeInfo}
       key={book.volumeInfo.industryIdentifiers[0].identifier}
       setBook={setBook}
-      setBooks={setBooks}
       setGoogleBooksOpen={setGoogleBooksOpen}
     />
   ));
 
   return (
     <>
-      <div id="isbnScroller">{content}</div>
+      <div id="isbnScroller">{isLoading ? "" : content}</div>
     </>
   );
 };
