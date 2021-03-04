@@ -6,6 +6,7 @@ const Book = ({ book, setBook, setResultsVisible }) => {
       title: book.title,
       isbn: book.industryIdentifiers[0].identifier,
     });
+
     setResultsVisible(false);
   };
   //Gets passed the volumeinfo part of book object.
@@ -28,8 +29,6 @@ const Book = ({ book, setBook, setResultsVisible }) => {
       <button onClick={clickHandler}>Choose</button>
     </div>
   );
-  // }
-  // else return <div></div>;
 };
 
 export default Book;

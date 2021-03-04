@@ -29,7 +29,3 @@ const Header = () => {
 };
 
 export default React.memo(Header);
-
-{
-  /* <h1>Tonari no Toshokan </h1> */
-}

@@ -10,11 +10,7 @@ function Findbook({ selectedLibraries, book, setBook }) {
 
   function handleLibraryBookSearch(event) {
     event.preventDefault();
-    console.log("I've been clicked");
-    console.log("first", Object.keys(book).length > 0);
-    console.log("second", selectedLibraries);
     if (Object.keys(book).length > 0 && selectedLibraries) {
-      console.log("Inside handle library book search");
       let newArray = selectedLibraries.map((library) => {
         return {
           systemid: library,

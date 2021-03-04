@@ -1,19 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Library from "./components/Library";
 import prefectures from "./assets/prefectures";
-import Request from "axios-request-handler";
+import libraryService from "./services/libraries";
 
 function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
-  const libraries = useRef([]);
+  const [libraries, setLibraries] = useState([]);
   const [prefecture, updatePrefecture] = useState({
     name_jp: "",
     name_en: "...",
   });
   const [isLoading, updateIsLoading] = useState(false);
-
-  // URL is https://api.calil.jp/library, using API-key-proxy-server
-  // const baseURL = "https://hidden-plains-37239.herokuapp.com/library";
-  const baseURL = "http://localhost:8080/https://api.calil.jp/library";
 
   //Handles change to prefecture select bar
   function handleChange(event) {
@@ -25,24 +21,14 @@ function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
 
   const libraryClearButtonClick = () => {
     setSelectedLibraries([]);
+    localStorage.setItem("libraries", JSON.stringify(""));
   };
 
   useEffect(() => {
     if (prefecture.name_jp) {
-      const requestInstance = new Request(baseURL, {
-        params: {
-          pref: `${prefecture.name_jp}`,
-          format: `json`,
-          callback: ``,
-          mode: "cors",
-        },
-      });
-
       updateIsLoading(true);
-
-      requestInstance.get().then((response) => {
-        libraries.current = response.data;
-        console.log("Libraries current", libraries.current);
+      libraryService.getLibraries(prefecture.name_jp).then((result) => {
+        setLibraries(result);
         updateIsLoading(false);
       });
     }
@@ -60,7 +46,7 @@ function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
   }
 
   //returns the system ids
-  const categories = libraries.current
+  const categories = libraries
     .map((library) => library.systemid)
     //filters out duplicate system ids
     .filter((id, index, array) => {
@@ -68,7 +54,7 @@ function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
     })
     //Pass on *just* category name and the relevant libraries
     .map((category, index) => {
-      const currentLibrary = libraries.current.filter(
+      const currentLibrary = libraries.filter(
         (object) => object.systemid === category
       );
       return (

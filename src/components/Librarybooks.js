@@ -1,91 +1,49 @@
-import React, { useState, useEffect, useRef } from "react";
-import Request from "axios-request-handler";
+import React, { useState, useEffect } from "react";
+import librarybooksHandler from "../services/librarybooks";
 import bookValue from "../assets/bookValue";
 
 //search is an object containing the selected book's ISBN and the library system id, passed to this component
 const Librarybooks = ({ search }) => {
-  const data = useRef({});
-  const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  // Usual URL is https://api.calil.jp/check, using API-key-proxy-server
-  //I made the mistake of naming API-key-proxy-server routes /library and /librarybook
-  //Which is a bad idea! Everything was going to /library and then failing. I tried test and it worked
-  //Test isn't a bad name, I'll keep it!
-  // const baseURL = "https://hidden-plains-37239.herokuapp.com/test";
-  const baseURL =
-    "https://cors-anywhere.herokuapp.com/https://api.calil.jp/check";
-
-  //startPolling is its own function that request will start running when needed
-  const startPolling = (session) => {
-    const pollingInstance = new Request(baseURL, {
-      params: {
-        session: `${session}`,
-        format: `json`,
-        callback: `no`,
-      },
-    });
-    //Polling has to wait at least two seconds between tries.
-    pollingInstance
-      .poll(2000)
-      .get((res) => {
-        //if continue is 1, pollingInstance keeps going. Returning false stops pollingInstance
-        if (res.data.continue === 0) {
-          session = 0;
-          data.current = res.data.books;
-          setLoading(false);
-          return false;
-        }
-      })
-      .catch((error) => {
-        setError(error.response);
-        setLoading(false);
-      });
-  };
+  const [data, setData] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    let session = 0;
+    let timerId;
+    let counter = 1;
     setLoading(true);
 
-    const requestInstance = new Request(baseURL, {
-      params: {
-        isbn: `${search.isbn}`,
-        systemid: `${search.systemid}`,
-        format: `json`,
-        callback: `no`,
-      },
-    });
+    const pollFunction = (session) => {
+      librarybooksHandler
+        .polling(session)
+        .then((result) => {
+          counter++;
+          if (result.continue === 0 || counter === 5) {
+            clearInterval(timerId);
+            setData(result.books);
+            setLoading(false);
+            counter = 0;
+          }
+        })
+        .catch((error) => {
+          clearInterval(timerId);
+          console.log(error);
+        });
+    };
 
-    requestInstance
-      .get()
-      .then((res) => {
-        if (res.data.continue === 0) {
-          data.current = res.data.books;
-          setLoading(false);
-        } else if (res.data.continue === 1) {
-          //If library responds continue = 1 we have to start polling
-          session = res.data.session;
-          startPolling(session);
-        }
-      })
-      .catch((error) => {
-        setError(error.response);
+    librarybooksHandler.getBook(search.isbn, search.systemid).then((result) => {
+      if (result.continue === 0) {
+        setData(result.books);
         setLoading(false);
-      });
+      } else if (result.continue === 1) {
+        timerId = setInterval(() => pollFunction(result.session), 5000);
+      }
+    });
   }, [search]);
 
   const returnArray = () => {
-    console.log("data current", data.current);
-    //In theory, if an error comes back it will be displayed...
-    if (error) {
-      return (
-        <div>
-          Error: {error.status} {error.statusText}
-        </div>
-      );
-    }
-    if (search.isbn in data.current) {
-      const libkey = data.current[search.isbn][search.systemid]["libkey"];
+    console.log("data in return array", data);
+    if (search.isbn in data) {
+      const libkey = data[search.isbn][search.systemid]["libkey"];
       //No results if libkey is empty (this means there was no book)
       if (libkey === undefined || Object.keys(libkey).length === 0) {
         return <div>No results for this book</div>;
@@ -96,7 +54,7 @@ const Librarybooks = ({ search }) => {
             <div key={property}>
               Branch: {property} Book status: {bookValue(libkey[property])}{" "}
               <a
-                href={data.current[search.isbn][search.systemid]["reserveurl"]}
+                href={data[search.isbn][search.systemid]["reserveurl"]}
                 target="_blank"
                 rel="noreferrer"
               >

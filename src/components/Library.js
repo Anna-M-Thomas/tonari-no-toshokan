@@ -4,7 +4,7 @@ import Branchdetails from "./Branchdetails";
 const Library = ({ index, category, addSelectedLibrary, currentLibrary }) => {
   const [open, setOpen] = useState(false);
 
-  const toggleDetails = (event) => {
+  const toggleDetails = () => {
     setOpen(!open);
   };
 

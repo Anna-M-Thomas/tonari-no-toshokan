@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import Chooselibrary from "./Chooselibrary";
 import Choosebook from "./Choosebook";
@@ -6,8 +6,17 @@ import Findbook from "./Findbook";
 import Header from "./components/Header";
 
 const App = () => {
-  const [selectedLibraries, setSelectedLibraries] = useState([]);
-  const [book, setBook] = useState({});
+  const savedlibraries = JSON.parse(localStorage.getItem("libraries"));
+  const savedbook = JSON.parse(localStorage.getItem("book"));
+  const [selectedLibraries, setSelectedLibraries] = useState(
+    savedlibraries || []
+  );
+  const [book, setBook] = useState(savedbook || {});
+
+  useEffect(() => {
+    localStorage.setItem("libraries", JSON.stringify(selectedLibraries));
+    localStorage.setItem("book", JSON.stringify(book));
+  }, [selectedLibraries, book]);
 
   return (
     <>
