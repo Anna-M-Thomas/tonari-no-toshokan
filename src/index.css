@@ -68,6 +68,10 @@ code {
   height: 4rem;
 }
 
+#header a {
+  margin: 10px;
+}
+
 #headerContainer {
   width: 100%;
   display: flex;

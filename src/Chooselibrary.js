@@ -3,7 +3,7 @@ import Library from "./components/Library";
 import prefectures from "./assets/prefectures";
 import Request from "axios-request-handler";
 
-function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
+function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
   const libraries = useRef([]);
   const [prefecture, updatePrefecture] = useState({
     name_jp: "",
@@ -13,8 +13,7 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
 
   // URL is https://api.calil.jp/library, using API-key-proxy-server
   // const baseURL = "https://hidden-plains-37239.herokuapp.com/library";
-  const baseURL =
-    "https://cors-anywhere.herokuapp.com/https://api.calil.jp/library";
+  const baseURL = "http://localhost:8080/https://api.calil.jp/library";
 
   //Handles change to prefecture select bar
   function handleChange(event) {
@@ -84,7 +83,7 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
     });
 
   return (
-    <>
+    <div className="container">
       {selectedLibraries.length > 0 && (
         <div className="topbar">
           Selected libraries:{" "}
@@ -111,8 +110,8 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
         </form>
       </div>
       {isLoading ? "" : <ul>{categories}</ul>}
-    </>
+    </div>
   );
 }
 
-export default Librarysearch;
+export default Chooselibrary;

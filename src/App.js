@@ -1,39 +1,44 @@
 import React, { useState } from "react";
-import Librarysearch from "./Librarysearch";
-import Booksearch from "./Booksearch";
+import { Switch, Route } from "react-router-dom";
+import Chooselibrary from "./Chooselibrary";
+import Choosebook from "./Choosebook";
+import Findbook from "./Findbook";
 import Header from "./components/Header";
 
 const App = () => {
-  const [mode, changeMode] = useState("book");
   const [selectedLibraries, setSelectedLibraries] = useState([]);
   const [book, setBook] = useState({});
 
   return (
     <>
-      <Header changeMode={changeMode} />
-      <main className="container">
-        {mode === "library" ? (
-          <Librarysearch
+      <Header />
+      <Switch>
+        <Route path="/library">
+          <Chooselibrary
             selectedLibraries={selectedLibraries}
             setSelectedLibraries={setSelectedLibraries}
           />
-        ) : (
-          <Booksearch
+        </Route>
+        <Route path="/choosebook">
+          <Choosebook setBook={setBook} />
+        </Route>
+        <Route path="/findbook">
+          <Findbook
             book={book}
             setBook={setBook}
             selectedLibraries={selectedLibraries}
           />
-        )}
-        <div className="about">
-          <a
-            href="https://github.com/sacchan9/tonari-no-toshokan/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            About
-          </a>
-        </div>
-      </main>
+        </Route>
+      </Switch>
+      <div className="about">
+        <a
+          href="https://github.com/Anna-M-Thomas/tonari-no-toshokan"
+          target="_blank"
+          rel="noreferrer"
+        >
+          About
+        </a>
+      </div>
     </>
   );
 };

@@ -1,12 +1,12 @@
 import React from "react";
 
-const Book = ({ book, setBook, setGoogleBooksOpen }) => {
+const Book = ({ book, setBook, setResultsVisible }) => {
   const clickHandler = () => {
     setBook({
       title: book.title,
       isbn: book.industryIdentifiers[0].identifier,
     });
-    setGoogleBooksOpen(false);
+    setResultsVisible(false);
   };
   //Gets passed the volumeinfo part of book object.
   //Choosing any book (with setBook) closes the google books panel for selecting book

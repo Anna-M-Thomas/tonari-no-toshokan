@@ -1,14 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const Header = ({ changeMode }) => {
-  const handleLibraryClick = () => {
-    changeMode("library");
-  };
-
-  const handleBookClick = () => {
-    changeMode("book");
-  };
-
+const Header = () => {
   return (
     <>
       <div id="headerContainer">
@@ -21,9 +14,10 @@ const Header = ({ changeMode }) => {
             />
             <source srcSet="./car_book_idou_tosyokan.webp" type="image/webp" />
           </picture>
-          <button onClick={handleLibraryClick}>Choose libraries</button>
-          <h1>Tonari no Toshokan </h1>
-          <button onClick={handleBookClick}>Search for a book</button>
+          <Link to="/library">Choose libraries</Link>
+          <Link to="/choosebook">Choose a book</Link>
+          <Link to="/findbook">Search for book</Link>
+
           <picture>
             <img className="headerImg" alt="book" src="./book_yoko.png" />
             <source srcSet="./book_yoko.webp" type="image/webp" />
@@ -35,3 +29,7 @@ const Header = ({ changeMode }) => {
 };
 
 export default React.memo(Header);
+
+{
+  /* <h1>Tonari no Toshokan </h1> */
+}
