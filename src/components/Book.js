@@ -11,20 +11,25 @@ const Book = ({ book, setBook, setGoogleBooksOpen }) => {
   //Gets passed the volumeinfo part of book object.
   //Choosing any book (with setBook) closes the google books panel for selecting book
   //If I check for !book it doesn't work, I guess an empty object isn't falsey enough
-  if (Object.keys(book).length > 0) {
-    return (
-      <div className="book">
-        <strong>{book.title}</strong>
-        {book.hasOwnProperty("imageLinks") ? (
-          <img className="bookImg" src={`${book.imageLinks.smallThumbnail}`} />
-        ) : (
-          ""
-        )}
-        By {book.authors ? book.authors.slice(0, 3).join(", ") : "..."}
-        <button onClick={clickHandler}>Choose</button>
-      </div>
-    );
-  } else return <div></div>;
+  // if (Object.keys(book).length > 0) {
+  return (
+    <div className="book">
+      <strong>{book.title}</strong>
+      {book.hasOwnProperty("imageLinks") ? (
+        <img
+          className="bookImg"
+          alt="book cover"
+          src={`${book.imageLinks.smallThumbnail}`}
+        />
+      ) : (
+        ""
+      )}
+      By {book.authors ? book.authors.slice(0, 3).join(", ") : "..."}
+      <button onClick={clickHandler}>Choose</button>
+    </div>
+  );
+  // }
+  // else return <div></div>;
 };
 
 export default Book;

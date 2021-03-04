@@ -44,7 +44,7 @@ const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
 
   //I only need industryIdentifiers[0], either ISBN 10 or 13 will work
   //and it should have at least one of those
-  let content = books.current.map((book) => (
+  const content = books.current.map((book) => (
     <Book
       book={book.volumeInfo}
       key={book.volumeInfo.industryIdentifiers[0].identifier}
@@ -53,11 +53,7 @@ const Googlebooks = ({ googleBooksQuery, setBook, setGoogleBooksOpen }) => {
     />
   ));
 
-  return (
-    <>
-      <div id="isbnScroller">{isLoading ? "" : content}</div>
-    </>
-  );
+  return <div id="isbnScroller">{isLoading ? "" : content}</div>;
 };
 
 export default Googlebooks;

@@ -29,7 +29,6 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
   };
 
   useEffect(() => {
-    console.log("I've been called");
     if (prefecture.name_jp) {
       const requestInstance = new Request(baseURL, {
         params: {
@@ -83,8 +82,6 @@ function Librarysearch({ selectedLibraries, setSelectedLibraries }) {
         />
       );
     });
-
-  console.log("categories", categories);
 
   return (
     <>
