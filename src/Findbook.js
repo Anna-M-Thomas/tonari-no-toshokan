@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
 import Librarybooks from "./components/Librarybooks";
 
-function Findbook({ selectedLibraries, book, setBook }) {
+function Findbook() {
   const [libraryBookSearch, setLibraryBookSearch] = useState([]);
-
-  const bookClearButtonClick = () => {
-    setBook({});
-  };
+  const selectedLibraries = useSelector((state) => state.libraries);
+  const book = useSelector((state) => state.book);
 
   function handleLibraryBookSearch(event) {
     event.preventDefault();
@@ -27,14 +27,6 @@ function Findbook({ selectedLibraries, book, setBook }) {
 
   return (
     <div className="container">
-      {Object.keys(book).length > 0 && (
-        <div className="topbar">
-          Selected book: {book.title}
-          <button onClick={bookClearButtonClick} className="alertButton">
-            Clear
-          </button>
-        </div>
-      )}
       <form onSubmit={handleLibraryBookSearch} className="topbar">
         <button type="submit">Search libraries for your book</button>
       </form>

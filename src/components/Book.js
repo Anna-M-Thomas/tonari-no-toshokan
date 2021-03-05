@@ -1,11 +1,17 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setBook } from "../reducers/bookReducer";
 
-const Book = ({ book, setBook, setResultsVisible }) => {
+const Book = ({ book, setResultsVisible }) => {
+  const dispatch = useDispatch();
+
   const clickHandler = () => {
-    setBook({
-      title: book.title,
-      isbn: book.industryIdentifiers[0].identifier,
-    });
+    dispatch(
+      setBook({
+        title: book.title,
+        isbn: book.industryIdentifiers[0].identifier,
+      })
+    );
 
     setResultsVisible(false);
   };

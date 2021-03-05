@@ -1,12 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+const Menu = () => {
   return (
     <>
       <div id="headerContainer">
         <div id="header">
-          <picture>
+          <Link to="/library">Choose libraries</Link>
+          <Link to="/choosebook">Choose a book</Link>
+          <Link to="/findbook">Search for book</Link>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Menu;
+
+// {
+/* <picture>
             <img
               className="headerImg"
               alt="bookmobile"
@@ -14,18 +26,9 @@ const Header = () => {
             />
             <source srcSet="./car_book_idou_tosyokan.webp" type="image/webp" />
           </picture>
-          <Link to="/library">Choose libraries</Link>
-          <Link to="/choosebook">Choose a book</Link>
-          <Link to="/findbook">Search for book</Link>
 
-          <picture>
+<picture>
             <img className="headerImg" alt="book" src="./book_yoko.png" />
             <source srcSet="./book_yoko.webp" type="image/webp" />
-          </picture>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default React.memo(Header);
+//           </picture> */
+// }

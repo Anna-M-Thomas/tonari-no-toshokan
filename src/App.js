@@ -1,42 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Chooselibrary from "./Chooselibrary";
 import Choosebook from "./Choosebook";
 import Findbook from "./Findbook";
-import Header from "./components/Header";
+import Menu from "./components/Menu";
+import Librarybar from "./components/Librarybar";
+import Bookbar from "./components/Bookbar";
 
 const App = () => {
-  const savedlibraries = JSON.parse(localStorage.getItem("libraries"));
-  const savedbook = JSON.parse(localStorage.getItem("book"));
-  const [selectedLibraries, setSelectedLibraries] = useState(
-    savedlibraries || []
-  );
-  const [book, setBook] = useState(savedbook || {});
-
-  useEffect(() => {
-    localStorage.setItem("libraries", JSON.stringify(selectedLibraries));
-    localStorage.setItem("book", JSON.stringify(book));
-  }, [selectedLibraries, book]);
+  // const [book, setBook] = useState(savedbook || {});
 
   return (
     <>
-      <Header />
+      <Menu />
+      <Librarybar />
+      <Bookbar />
       <Switch>
         <Route path="/library">
-          <Chooselibrary
-            selectedLibraries={selectedLibraries}
-            setSelectedLibraries={setSelectedLibraries}
-          />
+          <Chooselibrary />
         </Route>
         <Route path="/choosebook">
-          <Choosebook setBook={setBook} />
+          <Choosebook />
         </Route>
         <Route path="/findbook">
-          <Findbook
-            book={book}
-            setBook={setBook}
-            selectedLibraries={selectedLibraries}
-          />
+          <Findbook />
         </Route>
       </Switch>
       <div className="about">

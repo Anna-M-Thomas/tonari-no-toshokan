@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Branchdetails from "./Branchdetails";
 
-const Library = ({ index, category, addSelectedLibrary, currentLibrary }) => {
+const Library = ({ category, addSelectedLibrary, currentLibrary }) => {
   const [open, setOpen] = useState(false);
 
   const toggleDetails = () => {
@@ -9,8 +9,8 @@ const Library = ({ index, category, addSelectedLibrary, currentLibrary }) => {
   };
 
   return (
-    <li key={index}>
-      <div className="libraryName">
+    <li>
+      <div className="libraryName" key>
         <div onClick={toggleDetails}>
           {open ? (
             <i className="fas fa-angle-double-down"></i>

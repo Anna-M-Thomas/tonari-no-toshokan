@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import googleService from "./services/googlebooks";
 import Book from "./components/Book";
 
-const Choosebook = ({ setBook }) => {
+const Choosebook = () => {
   //The one on the top handles change, the one on the bottom is final query
   const [googleBooksQuery, setGoogleBooksQuery] = useState("");
   const [finalSearch, setFinalSearch] = useState("");
@@ -53,7 +53,6 @@ const Choosebook = ({ setBook }) => {
     <Book
       book={book.volumeInfo}
       key={book.volumeInfo.industryIdentifiers[0].identifier}
-      setBook={setBook}
       setResultsVisible={setResultsVisible}
     />
   ));

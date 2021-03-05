@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addLibrary } from "./reducers/libraryReducer";
 import Library from "./components/Library";
 import prefectures from "./assets/prefectures";
 import libraryService from "./services/libraries";
 
-function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
+function Chooselibrary() {
   const [libraries, setLibraries] = useState([]);
   const [prefecture, updatePrefecture] = useState({
     name_jp: "",
     name_en: "...",
   });
   const [isLoading, updateIsLoading] = useState(false);
+
+  const selectedLibraries = useSelector((state) => state.libraries);
+  const dispatch = useDispatch();
 
   //Handles change to prefecture select bar
   function handleChange(event) {
@@ -18,11 +23,6 @@ function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
     );
     updatePrefecture(selectedPrefecture);
   }
-
-  const libraryClearButtonClick = () => {
-    setSelectedLibraries([]);
-    localStorage.setItem("libraries", JSON.stringify(""));
-  };
 
   useEffect(() => {
     if (prefecture.name_jp) {
@@ -41,7 +41,8 @@ function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
       (library) => library === newSelected
     );
     if (!inArray) {
-      setSelectedLibraries(selectedLibraries.concat(newSelected));
+      dispatch(addLibrary(newSelected));
+      //setSelectedLibraries(selectedLibraries.concat(newSelected));
     }
   }
 
@@ -51,34 +52,25 @@ function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
     //filters out duplicate system ids
     .filter((id, index, array) => {
       return array.indexOf(id) === index;
-    })
-    //Pass on *just* category name and the relevant libraries
-    .map((category, index) => {
-      const currentLibrary = libraries.filter(
-        (object) => object.systemid === category
-      );
-      return (
-        <Library
-          key={index}
-          index={index}
-          category={category}
-          addSelectedLibrary={addSelectedLibrary}
-          currentLibrary={currentLibrary}
-        />
-      );
     });
+
+  //Pass on *just* category name and the relevant libraries
+  const libraryComponents = categories.map((category) => {
+    const currentLibrary = libraries.filter(
+      (object) => object.systemid === category
+    );
+    return (
+      <Library
+        key={currentLibrary[0].libid}
+        category={category}
+        addSelectedLibrary={addSelectedLibrary}
+        currentLibrary={currentLibrary}
+      />
+    );
+  });
 
   return (
     <div className="container">
-      {selectedLibraries.length > 0 && (
-        <div className="topbar">
-          Selected libraries:{" "}
-          {selectedLibraries.map((item) => item.replace("_", " ")).join(", ")}
-          <button onClick={libraryClearButtonClick} className="alertButton">
-            Clear
-          </button>{" "}
-        </div>
-      )}
       <div className="topbar">
         <div className="bold">Find a library</div>
         <form>
@@ -87,15 +79,15 @@ function Chooselibrary({ selectedLibraries, setSelectedLibraries }) {
             value={prefecture.name_jp}
             onChange={handleChange}
           >
-            {prefectures.map((prefecture, index) => (
-              <option value={prefecture.name_jp} key={index}>
+            {prefectures.map((prefecture) => (
+              <option value={prefecture.name_jp} key={prefecture.name_jp}>
                 {prefecture.name_en}
               </option>
             ))}
           </select>
         </form>
       </div>
-      {isLoading ? "" : <ul>{categories}</ul>}
+      {isLoading ? "" : <ul>{libraryComponents}</ul>}
     </div>
   );
 }
