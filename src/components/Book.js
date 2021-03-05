@@ -12,13 +12,10 @@ const Book = ({ book, setResultsVisible }) => {
         isbn: book.industryIdentifiers[0].identifier,
       })
     );
-
     setResultsVisible(false);
   };
-  //Gets passed the volumeinfo part of book object.
-  //Choosing any book (with setBook) closes the google books panel for selecting book
-  //If I check for !book it doesn't work, I guess an empty object isn't falsey enough
-  // if (Object.keys(book).length > 0) {
+
+  //Gets passed the volumeinfo part of book object
   return (
     <div className="book">
       <strong>{book.title}</strong>

@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addLibrary } from "./reducers/libraryReducer";
+import { addLibrary } from "./reducers/selectedLibrariesReducer";
 import Library from "./components/Library";
 import prefectures from "./assets/prefectures";
-import libraryService from "./services/libraries";
+import { setLibraries } from "./reducers/librariesReducer";
+//import libraryService from "./services/libraries";
 
 function Chooselibrary() {
-  const [libraries, setLibraries] = useState([]);
+  //const [libraries, setLibraries] = useState([]);
+  const libraries = useSelector((state) => state.libraries);
   const [prefecture, updatePrefecture] = useState({
     name_jp: "",
     name_en: "...",
   });
   const [isLoading, updateIsLoading] = useState(false);
 
-  const selectedLibraries = useSelector((state) => state.libraries);
+  const selectedLibraries = useSelector((state) => state.selectedLibraries);
   const dispatch = useDispatch();
 
   //Handles change to prefecture select bar
@@ -27,12 +29,10 @@ function Chooselibrary() {
   useEffect(() => {
     if (prefecture.name_jp) {
       updateIsLoading(true);
-      libraryService.getLibraries(prefecture.name_jp).then((result) => {
-        setLibraries(result);
-        updateIsLoading(false);
-      });
+      dispatch(setLibraries(prefecture.name_jp));
+      updateIsLoading(false);
     }
-  }, [prefecture]);
+  }, [prefecture, dispatch]);
 
   function addSelectedLibrary(event) {
     const newSelected = event.target.dataset.systemid;

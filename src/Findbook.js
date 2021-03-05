@@ -5,7 +5,7 @@ import Librarybooks from "./components/Librarybooks";
 
 function Findbook() {
   const [libraryBookSearch, setLibraryBookSearch] = useState([]);
-  const selectedLibraries = useSelector((state) => state.libraries);
+  const selectedLibraries = useSelector((state) => state.selectedLibraries);
   const book = useSelector((state) => state.book);
 
   function handleLibraryBookSearch(event) {

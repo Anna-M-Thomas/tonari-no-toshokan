@@ -1,3 +1,5 @@
+//This is for selected libraries
+
 export const addLibrary = (library) => {
   return {
     type: "ADD_LIBRARY",
@@ -14,7 +16,7 @@ export const clearLibraries = () => {
 
 const savedLibraries = JSON.parse(localStorage.getItem("libraries"));
 
-const libraryReducer = (state = savedLibraries || [], action) => {
+const selectedLibrariesReducer = (state = savedLibraries || [], action) => {
   switch (action.type) {
     case "ADD_LIBRARY":
       const newLibraries = state.concat(action.data);
@@ -28,4 +30,4 @@ const libraryReducer = (state = savedLibraries || [], action) => {
   }
 };
 
-export default libraryReducer;
+export default selectedLibrariesReducer;
