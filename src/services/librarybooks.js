@@ -1,11 +1,6 @@
 import Request from "axios-request-handler";
 
-// Usual URL is https://api.calil.jp/check, using API-key-proxy-server
-//I made the mistake of naming API-key-proxy-server routes /library and /librarybook
-//Which is a bad idea! Everything was going to /library and then failing. I tried test and it worked
-//Test isn't a bad name, I'll keep it!
-const baseURL = "https://api-key-proxy-server.onrender.com:5000/test";
-// const baseURL = "http://localhost:5000/test";
+const baseURL = "https://api.calil.jp/check";
 
 const polling = (session) => {
   const pollingInstance = new Request(baseURL, {
@@ -13,6 +8,7 @@ const polling = (session) => {
       session: `${session}`,
       format: `json`,
       callback: `no`,
+      appkey: process.env.REACT_APP_API_KEY
     },
   });
 
