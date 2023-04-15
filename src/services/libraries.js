@@ -1,7 +1,7 @@
 import Request from "axios-request-handler";
 
 // URL is https://api.calil.jp/library, using API-key-proxy-server
-const baseURL = "https://api-key-proxy-server.onrender.com/library";
+const baseURL = "https://api-key-proxy-server.onrender.com:5000/library";
 //const baseURL = "http://localhost:5000/library";
 
 const getLibraries = (prefecture) => {
