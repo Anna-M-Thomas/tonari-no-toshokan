@@ -4,8 +4,8 @@ import Request from "axios-request-handler";
 //I made the mistake of naming API-key-proxy-server routes /library and /librarybook
 //Which is a bad idea! Everything was going to /library and then failing. I tried test and it worked
 //Test isn't a bad name, I'll keep it!
-// const baseURL = "https://hidden-plains-37239.herokuapp.com/test";
-const baseURL = "http://localhost:8080/https://api.calil.jp/check";
+const baseURL = "https://https://api-key-proxy-server.onrender.com/test";
+// const baseURL = "http://localhost:5000/test";
 
 const polling = (session) => {
   const pollingInstance = new Request(baseURL, {

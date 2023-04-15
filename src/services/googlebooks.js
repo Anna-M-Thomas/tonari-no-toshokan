@@ -1,17 +1,17 @@
 import Request from "axios-request-handler";
 
 const getBooks = (search) => {
-  const baseURL = `https://www.googleapis.com/books/v1/volumes?q=${search}&fields=items(volumeInfo)&maxResults=40&key=${process.env.REACT_APP_GOOGLE_API}`;
-  const requestInstance = new Request(baseURL);
+  const baseUrl = "https://api-key-proxy-server.onrender.com/googlebook";
+//  const baseURL = "http://localhost:5000/googlebook";
+  const requestInstance = new Request(baseURL, {
+    params: {
+      q: search,
+      fields: "items(volumeInfo)",
+      maxResults: 40
+    },
+  });
+  //&key=${process.env.REACT_APP_GOOGLE_API}`;
   return requestInstance.get().then((response) => response.data);
 };
 
 export default { getBooks };
-
-// const requestInstance = new Request(baseURL, {
-//   params: {
-//     q: `${googleBooksQuery}`,
-//     fields: `items(volumeInfo)`,
-//     maxResults: `40`,
-//   },
-// });

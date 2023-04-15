@@ -10,7 +10,7 @@ const Library = ({ category, addSelectedLibrary, currentLibrary }) => {
 
   return (
     <li>
-      <div className="libraryName" key>
+      <div className="libraryName" key={currentLibrary.id}>
         <div onClick={toggleDetails}>
           {open ? (
             <i className="fas fa-angle-double-down"></i>
